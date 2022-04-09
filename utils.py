@@ -20,7 +20,7 @@ def crop(pcd, range_x, range_y, range_z):
   return cropPCD
 
 
-def plane(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_iterations=1000):
+def plane(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_iterations=1000, visual_flag=False):
     # Processing with loop
     i = 1
     dict_plane = {}
@@ -47,12 +47,12 @@ def plane(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_it
         points_others = np.asarray(other.points)
         print(f"Number of points in the other: {points_others.shape[0]}")
         # Visualize
-        # if visual_flag:
-        color_rand = np.random.rand(3)
+        if visual_flag:
+            color_rand = np.random.rand(3)
+        
+            plane.paint_uniform_color(color_rand)
 
-        plane.paint_uniform_color(color_rand)
-
-        o3d.visualization.draw_geometries([plane])
+            o3d.visualization.draw_geometries([plane])
         # Break if no points left
         
         # create dict(list) to save plane points
