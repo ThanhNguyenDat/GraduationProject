@@ -61,8 +61,7 @@ def plane(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_it
         dict_plane["surface_"+str(i)] = points_others.tolist()
         with open("./plane.json", "w") as f:
             json.dump(dict_plane, f)
-
-        
+            
         print("Point_others....................................: ", points_others.shape[0])
         if points_others.shape[0] < threshold_points:
             break
