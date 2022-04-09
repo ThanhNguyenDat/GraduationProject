@@ -6,23 +6,50 @@ import open3d as o3d
 import json
 import os
 
-def crop(pcd, range_x, range_y, range_z):
-  n_xyz = np.asarray(pcd.points)
-  mask_x = (n_xyz[:, 0] > range_x[0]) & (n_xyz[:, 0] < range_x[1])
-  
-  # print(mask_x)
-  mask_y = (n_xyz[:, 1] > range_y[0]) & (n_xyz[:, 1] < range_y[1])
-  mask_z = (n_xyz[:, 2] > range_z[0]) & (n_xyz[:, 2] < range_z[1])
-  mask = mask_x & mask_y & mask_z
-  # print(mask)
-  cropPCD = o3d.geometry.PointCloud()
-  cropPCD.points = o3d.utility.Vector3dVector(n_xyz[mask])
-  return cropPCD
+# create point cloud from array or list of points
+def create_pcd(data, color=None, path_save_ply=None):
+    pcd = o3d.geometry.PointCloud()
+    if type(data) == np.ndarray:
+        pcd.points = o3d.utility.Vector3dVector(data)
+    elif type(data) == list:
+        pcd.points = o3d.utility.Vector3dVector(np.asarray(data))
+    else:
+        raise TypeError("data must be a numpy array or a list")
+    if color is not None:
+        pcd.colors = o3d.utility.Vector3dVector(color)
+    if path_save_ply is not None:
+        o3d.io.write_point_cloud(path_save_ply, pcd)
+    return pcd
+
+
+# crop the point cloud
+def crop(pcd, range_x: list, range_y: list, range_z: list) -> o3d.geometry.PointCloud():
+    assert len(range_x) == 2, "range_x must be a list of length 2"
+    assert len(range_y) == 2, "range_y must be a list of length 2"
+    assert len(range_z) == 2, "range_z must be a list of length 2"
+
+    n_xyz = np.asarray(pcd.points)
+    mask_x = (n_xyz[:, 0] > range_x[0]) & (n_xyz[:, 0] < range_x[1])
+    
+    # print(mask_x)
+    mask_y = (n_xyz[:, 1] > range_y[0]) & (n_xyz[:, 1] < range_y[1])
+    mask_z = (n_xyz[:, 2] > range_z[0]) & (n_xyz[:, 2] < range_z[1])
+    mask = mask_x & mask_y & mask_z
+    # print(mask)
+    cropPCD = create_pcd(n_xyz[mask])
+    # cropPCD = o3d.geometry.PointCloud()
+    # cropPCD.points = o3d.utility.Vector3dVector(n_xyz[mask])
+    return cropPCD
+
+
+# ratation point cloud
+def rotation_point_cloud(pcd, axis, theta):
+    pass
 
 
 def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_iterations=1000, visual_flag=False, path_save_json=None):
     # Processing with loop
-    i = 1
+    i = 0
     dict_plane = {}
 
     while  np.asarray(pcd.points).shape[0] > threshold_points:

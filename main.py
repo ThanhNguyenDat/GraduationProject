@@ -29,8 +29,13 @@ def main(opt):
     if opt.visual:
         o3d.visualization.draw_geometries([cropPCD])
     
+    # check rotation z axis
+    # pcd_rotate = pcd.rotate(axis=[0, 0, 1], angle=math.pi/2)
+    # o3d.visualization.draw_geometries([pcd_rotate])
+
+
     # down sampling
-    downPCD = cropPCD.voxel_down_sample(voxel_size = 0.01)
+    downPCD = cropPCD.voxel_down_sample(voxel_size=0.01)
     if opt.visual:
         o3d.visualization.draw_geometries([downPCD])
     
