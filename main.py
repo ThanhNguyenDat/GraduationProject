@@ -38,18 +38,20 @@ def main(opt):
         o3d.visualization.draw_geometries([downPCD])
     
     # plane segmentation
-    plane = plane(downPCD, threshold_points=opt.threshold_points, distance_threshold=opt.distance_threshold, ransac_n=opt.ransac_n, num_iterations=opt.num_iterations, visual_flag=opt.visual)
+    plane_seg = plane(downPCD, threshold_points=opt.threshold_points, distance_threshold=opt.distance_threshold, ransac_n=opt.ransac_n, num_iterations=opt.num_iterations, visual_flag=opt.visual)
 
-def parse_args(known_args=None):
+def parse_args(known=False):
     parser = argparse.ArgumentParser(description='Process some integers.')
-    parser.add_argument('--path_img', type=str, default='./images/158.ply')
-    parser.add_argument('--visual', type=bool, default=False)
-    parser.add_argument('--threshold_points', type=int, default=100)
-    parser.add_argument('--distance_threshold', type=float, default=0.01)
-    parser.add_argument('--ransac_n', type=int, default=3)
-    parser.add_argument('--num_iterations', type=int, default=1000)
-
+    parser.add_argument('--path_img', type=str, default='./images/158.ply', help="path to the ply file")
+    parser.add_argument('--visual', type=bool, default=True, help="visualize the result")
+    parser.add_argument('--visual_n_th', type=int, default=1, help="visualize the n'th result")
+    parser.add_argument('--threshold_points', type=int, default=100, help="threshold points")
+    parser.add_argument('--distance_threshold', type=float, default=0.01, help="distance threshold")
+    parser.add_argument('--ransac_n', type=int, default=3, help="ransac n")
+    parser.add_argument('--num_iterations', type=int, default=1000, help="num iterations")
+    pt = parser.parse_known_args()[0] if known else parser.parse_args()
     args = parser.parse_args()
+
     return args
 
 if __name__ == "__main__":

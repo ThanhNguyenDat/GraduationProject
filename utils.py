@@ -25,14 +25,14 @@ def plane(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_it
     i = 1
     dict_plane = {}
 
-    while  pcd.shape[0] > threshold_points:
+    while  np.asarray(pcd.points).shape[0] > threshold_points:
         plane_model, inliers = pcd.segment_plane(distance_threshold=distance_threshold,
                                                 ransac_n=ransac_n,
                                                 num_iterations=num_iterations)
-        [a, b, c, d] = plane_model           
-        print(f"Plane equation: {a:.2f}x + {b:.2f}y + {c:.2f}z + {d:.2f} = 0")
-        
-        print("Processing with the {} loop".format(i))
+        if visual_flag:
+            [a, b, c, d] = plane_model           
+            print(f"Plane equation: {a:.2f}x + {b:.2f}y + {c:.2f}z + {d:.2f} = 0")
+            print("Processing with the {} loop".format(i))
         # Segment plane
 
         # Extract inliers and outliers
@@ -49,9 +49,7 @@ def plane(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_it
         # Visualize
         if visual_flag:
             color_rand = np.random.rand(3)
-        
             plane.paint_uniform_color(color_rand)
-
             o3d.visualization.draw_geometries([plane])
         # Break if no points left
         
