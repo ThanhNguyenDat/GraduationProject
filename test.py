@@ -11,7 +11,7 @@ with open("./results/plane_points.json") as f:
     # print(len(data["surface_1"]))
     
     pcd = o3d.geometry.PointCloud()
-    pcd.points = o3d.utility.Vector3dVector(np.asarray(data["surface_1"]))
+    pcd.points = o3d.utility.Vector3dVector(np.asarray(data["plane_seg_1"]))
     # pcd.points = o3d.utility.Vector3dVector(data["surface_1"])
     print(pcd.points)
     # visualize

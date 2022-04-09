@@ -89,7 +89,8 @@ def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, nu
         # create dict(list) to save plane points
         # plane = {ten_1: [points], ten_2: [points]}
         
-        dict_plane["surface_"+str(i)] = points_others.tolist()
+        dict_plane["plane_seg_"+str(i)] = points_others.tolist()
+        # print(dict_plane)
         if os.path.isdir(path_save_json):
             with open(path_save_json+"/plane_points.json", "w") as f:
                 json.dump(dict_plane, f)
@@ -97,10 +98,7 @@ def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, nu
             os.mkdir(path_save_json)
             with open(path_save_json+"/plane_points.json", "w") as f:
                 json.dump(dict_plane, f)
-        
-        with open("./plane.json", "w") as f:
-            json.dump(dict_plane, f)
-            
+                
         # print("Point_others....................................: ", points_others.shape[0])
         if points_others.shape[0] < threshold_points:
             break
