@@ -47,10 +47,10 @@ def rotation_point_cloud(pcd, axis, theta):
     pass
 
 
-def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_iterations=1000, visual_flag=False, path_save_json=None):
+def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_iterations=1000, visual_flag=False, visual_n_th=0, path_save_json=None):
     # Processing with loop
     i = 0
-    dict_plane = {}
+    list_plane = {}
 
     while  np.asarray(pcd.points).shape[0] > threshold_points:
         if visual_flag:
@@ -89,16 +89,16 @@ def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, nu
         # create dict(list) to save plane points
         # plane = {ten_1: [points], ten_2: [points]}
         
-        dict_plane["plane_seg_"+str(i)] = points_others.tolist()
-        # print(dict_plane)
+        list_plane["plane_seg_"+str(i)] = points_others.tolist()
+        # print(list_plane)
         if os.path.isdir(path_save_json):
-            with open(path_save_json+"/plane_points.json", "w") as f:
-                json.dump(dict_plane, f)
+            with open(path_save_json + "/plane_points.json", "w") as f:
+                json.dump(list_plane, f)
         else:
             os.mkdir(path_save_json)
-            with open(path_save_json+"/plane_points.json", "w") as f:
-                json.dump(dict_plane, f)
-                
+            with open(path_save_json + "/plane_points.json", "w") as f:
+                json.dump(list_plane, f)
+
         # print("Point_others....................................: ", points_others.shape[0])
         if points_others.shape[0] < threshold_points:
             break
@@ -114,5 +114,15 @@ def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, nu
             print("===========================================================================================")
             print("\n")
     print("Total surfaces:", i)
-        
-        # return plane
+    print("\n")
+    print("===========================================================================================")
+    print("\n")
+
+    if visual_flag:
+        for id, da in enumerate(list_plane.keys()):
+            if id == visual_n_th:
+                print("Visualize with index pcd: ", id)
+                pcd = create_pcd(list_plane[da])
+                o3d.visualization.draw_geometries([pcd])
+                break
+    return list_plane   

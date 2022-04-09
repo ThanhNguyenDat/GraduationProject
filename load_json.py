@@ -1,11 +1,24 @@
-import json
+import json 
+import os
 import numpy as np
-import open3d as o3d 
-
-a = json.load(open("./plane.json"))
-print(a.keys())
-
-surface_1 = a["surface_1"]
-print(surface_1)
-# o3d.visualization.draw_geometries([surface_1])
-o3d.visualization.draw_geometries([surface_1])
+import open3d as o3d
+from utils import *
+with open("./results/plane_points.json") as f:
+    data = json.load(f)
+    n = 3
+    for id, da in enumerate(data.keys()):
+        # print(id)
+        if id == n:
+            print(da[id])
+            pcd = create_pcd(data[da])
+            o3d.visualization.draw_geometries([pcd])
+            break
+    # print(data.keys())
+    # print(data["surface_1"])
+    # print(type(data["surface_1"]))
+    # print(len(data["surface_1"]))
+    
+    pcd = create_pcd(data["plane_seg_1"])
+    print(pcd.points)
+    # visualize
+    # o3d.visualization.draw_geometries([pcd])
