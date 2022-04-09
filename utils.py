@@ -47,7 +47,7 @@ def rotation_point_cloud(pcd, axis, theta):
     pass
 
 
-def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_iterations=1000, visual_flag=False, visual_n_th=0, path_save_json=None):
+def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_iterations=1000, visual_flag=False, visual_n_th=0, path_save_json=None, file_json_name="plane_points.json"):
     # Processing with loop
     i = 0
     list_plane = {}
@@ -63,7 +63,6 @@ def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, nu
             [a, b, c, d] = plane_model           
             print(f"Plane equation: {a:.2f}x + {b:.2f}y + {c:.2f}z + {d:.2f} = 0")
             
-        
         # Segment plane
         # Extract inliers and outliers
         plane_pcd = pcd.select_by_index(inliers)
@@ -91,7 +90,7 @@ def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, nu
         
         list_plane["plane_seg_"+str(i)] = points_others.tolist()
         # print(list_plane)
-        file_json_name = "plane_points.json"
+        
         if os.path.isdir(path_save_json):
             with open(path_save_json + file_json_name, "w") as f:
                 json.dump(list_plane, f)

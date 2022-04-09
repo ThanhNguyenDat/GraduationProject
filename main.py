@@ -22,7 +22,8 @@ def main(opt):
     # ply_file.paint_uniform_color([1, 0.706, 0])
     
     #crop data
-    cropPCD = crop(pcd, [-0.75, 0.25], [-1, 1], [-1.25, -0.75])
+    cropPCD = crop(pcd, range_x=[-0.75, 0.25], range_y=[-1, 1], range_z=[-1.25, -0.75])
+    
     if opt.visual:
         o3d.visualization.draw_geometries([cropPCD])
     
@@ -38,7 +39,7 @@ def main(opt):
     
     # plane segmentation
     _plane_seg = plane_seg(downPCD, threshold_points=opt.threshold_points, distance_threshold=opt.distance_threshold, ransac_n=opt.ransac_n, num_iterations=opt.num_iterations, visual_flag=opt.visual, visual_n_th=opt.visual_n_th, path_save_json=opt.path_save_json)
-
+    
 def parse_args(known=False):
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('--path_img', type=str, default='./images/158.ply', help="path to the ply file")
