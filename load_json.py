@@ -5,7 +5,7 @@ import open3d as o3d
 from utils import *
 with open("./results/plane_points.json") as f:
     data = json.load(f)
-    n = 3
+    n = 0
     for id, da in enumerate(data.keys()):
         # print(id)
         if id == n:

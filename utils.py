@@ -24,9 +24,9 @@ def create_pcd(data, color=None, path_save_ply=None):
 
 # crop the point cloud
 def crop(pcd, range_x: list, range_y: list, range_z: list) -> o3d.geometry.PointCloud():
-    assert len(range_x) == 2, "range_x must be a list of length 2"
-    assert len(range_y) == 2, "range_y must be a list of length 2"
-    assert len(range_z) == 2, "range_z must be a list of length 2"
+    assert len(range_x) == 2, "range_x must be a list of length 2 include min and max"
+    assert len(range_y) == 2, "range_y must be a list of length 2 include min and max"
+    assert len(range_z) == 2, "range_z must be a list of length 2 include min and max"
 
     n_xyz = np.asarray(pcd.points)
     mask_x = (n_xyz[:, 0] > range_x[0]) & (n_xyz[:, 0] < range_x[1])
@@ -91,12 +91,13 @@ def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, nu
         
         list_plane["plane_seg_"+str(i)] = points_others.tolist()
         # print(list_plane)
+        file_json_name = "plane_points.json"
         if os.path.isdir(path_save_json):
-            with open(path_save_json + "/plane_points.json", "w") as f:
+            with open(path_save_json + file_json_name, "w") as f:
                 json.dump(list_plane, f)
         else:
             os.mkdir(path_save_json)
-            with open(path_save_json + "/plane_points.json", "w") as f:
+            with open(path_save_json + file_json_name, "w") as f:
                 json.dump(list_plane, f)
 
         # print("Point_others....................................: ", points_others.shape[0])
