@@ -4,7 +4,7 @@ import config
 from config import *
 import open3d as o3d
 import json
-
+import os
 
 def crop(pcd, range_x, range_y, range_z):
   n_xyz = np.asarray(pcd.points)
@@ -20,56 +20,74 @@ def crop(pcd, range_x, range_y, range_z):
   return cropPCD
 
 
-def plane(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_iterations=1000, visual_flag=False):
+def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_iterations=1000, visual_flag=False, path_save_json=None):
     # Processing with loop
     i = 1
     dict_plane = {}
 
     while  np.asarray(pcd.points).shape[0] > threshold_points:
+        if visual_flag:
+            print("iteration: ", i)
+
         plane_model, inliers = pcd.segment_plane(distance_threshold=distance_threshold,
                                                 ransac_n=ransac_n,
                                                 num_iterations=num_iterations)
         if visual_flag:
             [a, b, c, d] = plane_model           
             print(f"Plane equation: {a:.2f}x + {b:.2f}y + {c:.2f}z + {d:.2f} = 0")
-            print("Processing with the {} loop".format(i))
+            
+        
         # Segment plane
-
         # Extract inliers and outliers
-        plane = pcd.select_by_index(inliers)
-        other = pcd.select_by_index(inliers, invert=True)
+        plane_pcd = pcd.select_by_index(inliers)
+        other_pcd = pcd.select_by_index(inliers, invert=True)
         
         # Count points in plane
-        points_plane = np.asarray(plane.points)
-        print(f"Number of points in the plane: {points_plane.shape[0]}")
+        points_plane = np.asarray(plane_pcd.points)
+        if visual_flag:
+            print(f"Number of points in the plane: {points_plane.shape[0]}")
         
         # Count points in other
-        points_others = np.asarray(other.points)
-        print(f"Number of points in the other: {points_others.shape[0]}")
+        points_others = np.asarray(other_pcd.points)
+        if visual_flag:
+            print(f"Number of points in the other: {points_others.shape[0]}")
+        
         # Visualize
         if visual_flag:
             color_rand = np.random.rand(3)
-            plane.paint_uniform_color(color_rand)
-            o3d.visualization.draw_geometries([plane])
+            plane_pcd.paint_uniform_color(color_rand)
+            o3d.visualization.draw_geometries([plane_pcd])
         # Break if no points left
         
         # create dict(list) to save plane points
         # plane = {ten_1: [points], ten_2: [points]}
         
         dict_plane["surface_"+str(i)] = points_others.tolist()
+        if os.path.isdir(path_save_json):
+            with open(path_save_json+"/plane_points.json", "w") as f:
+                json.dump(dict_plane, f)
+        else:
+            os.mkdir(path_save_json)
+            with open(path_save_json+"/plane_points.json", "w") as f:
+                json.dump(dict_plane, f)
+        
         with open("./plane.json", "w") as f:
             json.dump(dict_plane, f)
             
-        print("Point_others....................................: ", points_others.shape[0])
+        # print("Point_others....................................: ", points_others.shape[0])
         if points_others.shape[0] < threshold_points:
             break
         
         # Update
-        pcd = other
+        pcd = other_pcd
 
         # points_others.shape[0]
         # other = other.select_by_index(inliers, invert=True)
         i += 1
-        print("Total surfaces:", i)
+        if visual_flag:
+            print("\n")
+            print("===========================================================================================")
+            print("\n")
+    print("Total surfaces:", i)
         
         # return plane
