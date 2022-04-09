@@ -117,12 +117,11 @@ def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, nu
     print("\n")
     print("===========================================================================================")
     print("\n")
-
-    if visual_flag:
+    if visual_n_th != None:
         for id, da in enumerate(list_plane.keys()):
             if id == visual_n_th:
                 print("Visualize with index pcd: ", id)
                 pcd = create_pcd(list_plane[da])
                 o3d.visualization.draw_geometries([pcd])
                 break
-    return list_plane   
+    return list_plane 
