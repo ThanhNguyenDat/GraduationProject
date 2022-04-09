@@ -17,9 +17,6 @@ from utils import *
 
 
 def main(opt):
-    z, y, z = 1.373, -8.081, -4.511
-    N = 9.356
-    
     # read ply file
     # path = img_dir + "/1.ply"
     # path = "./images/158.ply"
@@ -39,7 +36,7 @@ def main(opt):
     
     # plane segmentation
     _plane_seg = plane_seg(downPCD, threshold_points=opt.threshold_points, distance_threshold=opt.distance_threshold, ransac_n=opt.ransac_n, num_iterations=opt.num_iterations, visual_flag=opt.visual, path_save_json=opt.path_save_json)
-    
+
 def parse_args(known=False):
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('--path_img', type=str, default='./images/158.ply', help="path to the ply file")
