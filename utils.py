@@ -20,33 +20,15 @@ def crop(pcd, range_x, range_y, range_z):
   return cropPCD
 
 
-def plane(pcd):
-    # plane_model, inliers = pcd.segment_plane(distance_threshold=0.01,
-    #                                      ransac_n=3,
-    #                                      num_iterations=1000)
-    # [a, b, c, d] = plane_model
-    # print(f"Plane equation: {a:.2f}x + {b:.2f}y + {c:.2f}z + {d:.2f} = 0")
-
-    # plane = pcd.select_by_index(inliers)
-    # # Count points in plane
-    # points_plane = np.asarray(plane.points)
-    # print(f"Number of points in the plane: {points_plane.shape[0]}")
-
-    # # inlier_cloud.paint_uniform_color([1.0, 0, 0])
-    # other = pcd.select_by_index(inliers, invert=True)
-    # points_others = np.asarray(other.points)
-    # print(f"Number of points in the plane: {points_others.shape[0]}")
-
+def plane(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_iterations=1000):
     # Processing with loop
     i = 1
-    threshold_points = 100
     dict_plane = {}
 
-    while  True:#.shape[0] > 0:
-        
-        plane_model, inliers = pcd.segment_plane(distance_threshold=0.01,
-                                        ransac_n=3,
-                                        num_iterations=1000)
+    while  pcd.shape[0] > threshold_points:
+        plane_model, inliers = pcd.segment_plane(distance_threshold=distance_threshold,
+                                                ransac_n=ransac_n,
+                                                num_iterations=num_iterations)
         [a, b, c, d] = plane_model           
         print(f"Plane equation: {a:.2f}x + {b:.2f}y + {c:.2f}z + {d:.2f} = 0")
         
@@ -87,7 +69,6 @@ def plane(pcd):
         
         # Update
         pcd = other
-
 
         # points_others.shape[0]
         # other = other.select_by_index(inliers, invert=True)
