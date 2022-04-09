@@ -18,10 +18,7 @@ from utils import *
 
 def main(opt):
     # read ply file
-    # path = img_dir + "/1.ply"
-    # path = "./images/158.ply"
-    path = opt.path_img
-    pcd = o3d.io.read_point_cloud(path)
+    pcd = o3d.io.read_point_cloud(opt.path_img)
     # ply_file.paint_uniform_color([1, 0.706, 0])
     
     #crop data
