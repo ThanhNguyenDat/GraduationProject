@@ -113,11 +113,10 @@ def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, nu
             print("\n")
             print("===========================================================================================")
             print("\n")
+    
     print("Total surfaces:", i)
-    print("\n")
-    print("===========================================================================================")
-    print("\n")
     if visual_n_th != None:
+        assert visual_n_th <= i, "visual_n_th: {} must be smaller than total surfaces: {}".format(visual_n_th, i)
         for id, da in enumerate(list_plane.keys()):
             if id == visual_n_th:
                 print("Visualize with index pcd: ", id)
