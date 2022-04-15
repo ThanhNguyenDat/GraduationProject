@@ -1,13 +1,11 @@
 import numpy as np
-import math
-import config
 from config import *
 import open3d as o3d
 import json
 import os
 
 # create point cloud from array or list of points
-def create_pcd(data, color=None, path_save_ply=None):
+def create_pcd(data, color=None, path_save_ply=None) -> o3d.geometry.PointCloud():
     pcd = o3d.geometry.PointCloud()
     if type(data) == np.ndarray:
         pcd.points = o3d.utility.Vector3dVector(data)
@@ -23,7 +21,7 @@ def create_pcd(data, color=None, path_save_ply=None):
 
 
 # crop the point cloud
-def crop(pcd, range_x: list, range_y: list, range_z: list) -> o3d.geometry.PointCloud():
+def crop_point_cloud(pcd, range_x: list, range_y: list, range_z: list) -> o3d.geometry.PointCloud():
     assert len(range_x) == 2, "range_x must be a list of length 2 include min and max"
     assert len(range_y) == 2, "range_y must be a list of length 2 include min and max"
     assert len(range_z) == 2, "range_z must be a list of length 2 include min and max"
@@ -42,12 +40,80 @@ def crop(pcd, range_x: list, range_y: list, range_z: list) -> o3d.geometry.Point
     return cropPCD
 
 
-# ratation point cloud
-def rotation_point_cloud(pcd, axis, theta):
-    pass
+# rotation point cloud
+def rotation_point_cloud_from_xyz(pcd, xyz_rotation_angle: list) -> o3d.geometry.PointCloud():
+    assert len(xyz_rotation_angle) == 3, "xyz_rotation_angle must be a list of length 3 include x, y, z"
+    R = o3d.geometry.get_rotation_matrix_from_xyz(xyz_rotation_angle, center=(0,0,0))
+    pcd.rotate(R)
+    return pcd
+
+def rotation_point_cloud_from_angle(pcd, angle: float) -> o3d.geometry.PointCloud():
+    R = o3d.geometry.get_rotation_matrix_from_angle(angle, center=(0,0,0))
+    pcd.rotate(R)
+    return pcd
+
+def rotation_point_cloud_from_angle_axis(pcd, angle_axis: list) -> o3d.geometry.PointCloud():
+    assert len(angle_axis) == 4, "angle_axis must be a list of length 4 include angle and axis"
+    R = o3d.geometry.get_rotation_matrix_from_angle_axis(angle_axis[0], angle_axis[1:])
+    pcd.rotate(R)
+    return pcd
+def rotation_point_cloud_from_quaternion(pcd, quaternion: list) -> o3d.geometry.PointCloud():
+    assert len(quaternion) == 4, "quaternion must be a list of length 4 include x, y, z, w"
+    R = o3d.geometry.get_rotation_matrix_from_quaternion(quaternion)
+    pcd.rotate(R)
+    return pcd
+
+def rotation_point_cloud_from_euler_angles(pcd, euler_angles: list) -> o3d.geometry.PointCloud():
+    assert len(euler_angles) == 3, "euler_angles must be a list of length 3 include x, y, z"
+    R = o3d.geometry.get_rotation_matrix_from_euler_angles(euler_angles)
+    pcd.rotate(R)
+    return pcd
+
+def rotation_point_cloud_from_matrix(pcd, matrix: list) -> o3d.geometry.PointCloud():
+    assert len(matrix) == 9, "matrix must be a list of length 9 include x, y, z"
+    R = o3d.geometry.get_rotation_matrix_from_matrix(matrix)
+    pcd.rotate(R)
+    return pcd
+
+def rotation_point_cloud_from_quaternion_vector(pcd, quaternion_vector: list) -> o3d.geometry.PointCloud():
+    assert len(quaternion_vector) == 4, "quaternion_vector must be a list of length 4 include x, y, z, w"
+    R = o3d.geometry.get_rotation_matrix_from_quaternion_vector(quaternion_vector)
+    pcd.rotate(R)
+    return pcd
+
+def rotation_point_cloud_from_rotation_vector(pcd, rotation_vector: list) -> o3d.geometry.PointCloud():
+    assert len(rotation_vector) == 3, "rotation_vector must be a list of length 3 include x, y, z"
+    R = o3d.geometry.get_rotation_matrix_from_rotation_vector(rotation_vector)
+    pcd.rotate(R)
+    return pcd
+
+def rotation_point_cloud_from_rotation_matrix(pcd, rotation_matrix: list) -> o3d.geometry.PointCloud():
+    assert len(rotation_matrix) == 9, "rotation_matrix must be a list of length 9 include x, y, z"
+    R = o3d.geometry.get_rotation_matrix_from_rotation_matrix(rotation_matrix)
+    pcd.rotate(R)
+    return pcd
+
+def rotation_point_cloud_from_translation_vector(pcd, translation_vector: list) -> o3d.geometry.PointCloud():
+    assert len(translation_vector) == 3, "translation_vector must be a list of length 3 include x, y, z"
+    R = o3d.geometry.get_rotation_matrix_from_translation_vector(translation_vector)
+    pcd.rotate(R)
+    return pcd
+
+def rotation_point_cloud_from_translation_matrix(pcd, translation_matrix: list) -> o3d.geometry.PointCloud():
+    assert len(translation_matrix) == 9, "translation_matrix must be a list of length 9 include x, y, z"
+    R = o3d.geometry.get_rotation_matrix_from_translation_matrix(translation_matrix)
+    pcd.rotate(R)
+    return pcd
 
 
-def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, num_iterations=1000, visual_flag=False, visual_n_th=0, path_save_json=None, file_json_name="plane_points.json"):
+def plane_seg(pcd, 
+            threshold_points=100, 
+            distance_threshold=0.01, 
+            ransac_n=3, 
+            num_iterations=1000, 
+            visual_flag=False, 
+            visual_n_th=0, 
+            name_json_plane="plane_points.json"):
     # Processing with loop
     i = 0
     list_plane = {}
@@ -88,15 +154,21 @@ def plane_seg(pcd, threshold_points=100, distance_threshold=0.01, ransac_n=3, nu
         # create dict(list) to save plane points
         # plane = {ten_1: [points], ten_2: [points]}
         
-        list_plane["plane_seg_"+str(i)] = points_others.tolist()
+        list_plane["plane_seg_"+str(i)] = points_plane.tolist()
         # print(list_plane)
-        
-        if os.path.isdir(path_save_json):
-            with open(path_save_json + file_json_name, "w") as f:
+        path_results = "./result/"
+        if not os.path.isdir(path_results):
+            os.mkdir(path_results)
+            path_save_json = os.path.join(path_results, "json/")
+        else:
+            path_save_json = os.path.join(path_results, "json/")
+
+        if not os.path.isdir(path_save_json):
+            os.mkdir(path_save_json)
+            with open(path_save_json + name_json_plane, "w") as f:
                 json.dump(list_plane, f)
         else:
-            os.mkdir(path_save_json)
-            with open(path_save_json + file_json_name, "w") as f:
+            with open(path_save_json + name_json_plane, "w") as f:
                 json.dump(list_plane, f)
 
         # print("Point_others....................................: ", points_others.shape[0])

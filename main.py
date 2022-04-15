@@ -17,19 +17,22 @@ from utils import *
 
 
 def main(opt):
+    
+    mesh_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(
+    size=0.6, origin=[-2, -2, -2])
+
     # read ply file
     pcd = o3d.io.read_point_cloud(opt.path_img)
-    # ply_file.paint_uniform_color([1, 0.706, 0])
     
     #crop data
-    cropPCD = crop(pcd, range_x=[-0.75, 0.25], range_y=[-1, 1], range_z=[-1.25, -0.75])
+    cropPCD = crop_point_cloud(pcd, range_x=[-0.75, 0.25], range_y=[-1, 1], range_z=[-1.25, -0.75])
     
-    if opt.visual:
-        o3d.visualization.draw_geometries([cropPCD])
+    # rotate the point cloud
+    # rotatePCD = rotation_point_cloud_from_xyz(cropPCD, xyz_rotation_angle=(0, 0, coor_z))
+
+    # if opt.visual:
+    #     o3d.visualization.draw_geometries([rotatePCD])
     
-    # check rotation z axis
-    # pcd_rotate = pcd.rotate(axis=[0, 0, 1], angle=math.pi/2)
-    # o3d.visualization.draw_geometries([pcd_rotate])
 
     # down sampling
     downPCD = cropPCD.voxel_down_sample(voxel_size=0.01)
@@ -37,7 +40,14 @@ def main(opt):
         o3d.visualization.draw_geometries([downPCD])
     
     # plane segmentation
-    _plane_seg = plane_seg(downPCD, threshold_points=opt.threshold_points, distance_threshold=opt.distance_threshold, ransac_n=opt.ransac_n, num_iterations=opt.num_iterations, visual_flag=opt.visual, visual_n_th=opt.visual_n_th, path_save_json=opt.path_save_json)
+    _plane_seg = plane_seg(downPCD, 
+                        threshold_points=opt.threshold_points, 
+                        distance_threshold=opt.distance_threshold, 
+                        ransac_n=opt.ransac_n, 
+                        num_iterations=opt.num_iterations, 
+                        visual_flag=opt.visual, 
+                        visual_n_th=opt.visual_n_th, 
+                        name_json_plane=opt.name_json_plane)
 
 def parse_args(known=False):
     parser = argparse.ArgumentParser(description='Process some integers.')
@@ -48,7 +58,7 @@ def parse_args(known=False):
     parser.add_argument('--distance_threshold', type=float, default=0.01, help="distance threshold")
     parser.add_argument('--ransac_n', type=int, default=3, help="ransac n")
     parser.add_argument('--num_iterations', type=int, default=1000, help="num iterations")
-    parser.add_argument('--path_save_json', type=str, default='./results/', help="path to save the json file")
+    parser.add_argument('--name_json_plane', type=str, default='plane_points.json', help="path to save the json file")
     opt = parser.parse_known_args()[0] if known else parser.parse_args()
     return opt
 
