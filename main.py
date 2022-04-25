@@ -29,7 +29,19 @@ def main(opt):
     
     # rotate the point cloud
     # rotatePCD = rotation_point_cloud_from_xyz(cropPCD, xyz_rotation_angle=(0, 0, coor_z))
-
+    # compute the theta of the z axis
+    print("cropPCD.points: ", np.asarray(cropPCD.points))
+    theta = compute_theta(cropPCD.points[0], cropPCD.points[-1])
+    print("theta: ", theta)
+    rotation_z = Rz(coor_z)
+    print("rotation z: ", rotation_z)
+    # rotate the point cloud
+    rotatePCD = create_point_cloud_rotation(cropPCD, rotation_z)
+    print("rotatePCD: ", rotatePCD.points)
+    o3d.visualization.draw_geometries([cropPCD])
+    o3d.visualization.draw_geometries([rotatePCD])
+    o3d.visualization.draw_geometries([rotatePCD, cropPCD])
+    print("PCD: ", cropPCD.points)
     # if opt.visual:
     #     o3d.visualization.draw_geometries([rotatePCD])
     
@@ -58,7 +70,11 @@ def parse_args(known=False):
     parser.add_argument('--distance_threshold', type=float, default=0.01, help="distance threshold")
     parser.add_argument('--ransac_n', type=int, default=3, help="ransac n")
     parser.add_argument('--num_iterations', type=int, default=1000, help="num iterations")
-    parser.add_argument('--name_json_plane', type=str, default='plane_points.json', help="path to save the json file")
+    parser.add_argument('--name_json_plane', type=str, default='plane_points.json', help="path to save the plane json file")
+    parser.add_argument('--name_json_model', type=str, default='plane_model.json', help="path to save the model json file")
+    parser.add_argument('--coor_z', type=float, default=0.5, help="coor z")
+
+
     opt = parser.parse_known_args()[0] if known else parser.parse_args()
     return opt
 
