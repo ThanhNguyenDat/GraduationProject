@@ -50,13 +50,13 @@ def rotation_matrix_3x3_from_vectors(vec1, vec2):
     else:
         return np.eye(3)
 
-def transform_matrix_from_vector(vec):
+def transform_matrix_from_vector(vec, axis=(0, 0, 1)):
     """ Find the transform matrix that aligns vec1 to vec2
     :param vec: A 3d "source" vector
     :return mat: A transform matrix (4x4) that maps vec1 to vec2
     """
     mat = np.eye(4)
-    mat[:3,:3] = rotation_matrix_3x3_from_vectors(vec, (0, 0, 1))
+    mat[:3,:3] = rotation_matrix_3x3_from_vectors(vec, axis)
     return mat
     
 
