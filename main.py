@@ -18,8 +18,7 @@ from utils import *
 
 def main(opt):
     
-    mesh_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(
-    size=0.6, origin=[-2, -2, -2])
+    mesh_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.6, origin=[-2, -2, -2])
 
     # read ply file
     pcd = o3d.io.read_point_cloud(opt.path_img)
@@ -31,13 +30,20 @@ def main(opt):
     # rotatePCD = rotation_point_cloud_from_xyz(cropPCD, xyz_rotation_angle=(0, 0, coor_z))
     # compute the theta of the z axis
     print("cropPCD.points: ", np.asarray(cropPCD.points))
-    theta = compute_theta(cropPCD.points[0], cropPCD.points[-1])
-    print("theta: ", theta)
-    rotation_z = Rz(coor_z)
+    
+    
+    # Compute theta
+    # theta = compute_theta(cropPCD.points[0], cropPCD.points[-1])
+    # print("theta: ", theta)
+
+    # Rotation Rz
+    rotation_z = Rz(theta=30)
     print("rotation z: ", rotation_z)
+
     # rotate the point cloud
     rotatePCD = create_point_cloud_rotation(cropPCD, rotation_z)
     print("rotatePCD: ", rotatePCD.points)
+
     o3d.visualization.draw_geometries([cropPCD])
     o3d.visualization.draw_geometries([rotatePCD])
     o3d.visualization.draw_geometries([rotatePCD, cropPCD])

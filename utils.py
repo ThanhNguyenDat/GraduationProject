@@ -56,68 +56,12 @@ def Rz(theta):
                      [math.sin(theta), math.cos(theta), 0],
                      [0, 0, 1]])
 
-def compute_theta(vector_base, vector_target) -> float:
-    from numpy import dot
-    from numpy.linalg import norm
-
-    return math.acos(dot(vector_base, vector_target) / (norm(vector_base) * norm(vector_target)))
-
-def compute_rotation_matrix(vector_base, vector_target) -> np.ndarray:
-    from numpy import cross
-    from numpy.linalg import norm
-
-    theta = compute_theta(vector_base, vector_target)
-    axis = cross(vector_base, vector_target) / norm(cross(vector_base, vector_target))
-    return Rz(theta) @ Rx(axis[0]) @ Ry(axis[1]) @ Rz(axis[2])
 
 def create_point_cloud_rotation(pcd, rotation_matrix) -> o3d.geometry.PointCloud():
     n_xyz = np.asarray(pcd.points)
     n_xyz_rotated = np.dot(n_xyz, rotation_matrix)
     pcd_rotated = create_pcd(n_xyz_rotated)
     return pcd_rotated
-
-# compute translate vector
-def compute_translate_vector(pcd_base, pcd_target) -> np.ndarray:
-    n_xyz_base = np.asarray(pcd_base.points)
-    n_xyz_target = np.asarray(pcd_target.points)
-    return n_xyz_target - n_xyz_base
-
-# compute scale vector
-def compute_scale_vector(pcd_base, pcd_target) -> np.ndarray:
-    n_xyz_base = np.asarray(pcd_base.points)
-    n_xyz_target = np.asarray(pcd_target.points)
-    return n_xyz_target / n_xyz_base
-
-# translate follow the z axis
-def Tz(pcd, translation_vector) -> o3d.geometry.PointCloud():
-    if pcd is None:
-        return None
-    elif pcd is o3d.geometry.PointCloud:
-        n_xyz = np.asarray(pcd.points)
-        n_xyz_translated = n_xyz + translation_vector
-        pcd_translated = create_pcd(n_xyz_translated)
-        return pcd_translated
-    elif pcd is list:
-        n_xyz = np.asarray(pcd)
-        n_xyz_translated = n_xyz + translation_vector
-        pcd_translated = create_pcd(n_xyz_translated)
-        return pcd_translated
-    elif pcd is np.ndarray:
-        n_xyz = pcd
-        n_xyz_translated = n_xyz + translation_vector
-        pcd_translated = create_pcd(n_xyz_translated)
-        return pcd_translated
-    else:
-        raise TypeError("pcd must be a numpy array or a list")
-
-# translate the point cloud
-
-# translate the point cloud
-def translate_point_cloud(pcd, translation_vector) -> o3d.geometry.PointCloud():
-    n_xyz = np.asarray(pcd.points)
-    n_xyz_translated = n_xyz + translation_vector
-    pcd_translated = create_pcd(n_xyz_translated)
-    return pcd_translated
 
 
 def plane_seg(pcd, 
@@ -142,7 +86,7 @@ def plane_seg(pcd,
                                                 num_iterations=num_iterations)
     
         [a, b, c, d] = plane_model           
-        print(f"Plane equation: {a:.2f}x + {b:.2f}y + {c:.2f}z + {d:.2f} = 0")
+        print(f"Plane equation:{a:.2f}x + {b:.2f}y + {c:.2f}z + {d:.2f} = 0")
             
         # Segment plane
         # Extract inliers and outliers
