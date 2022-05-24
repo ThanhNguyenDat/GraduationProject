@@ -32,7 +32,7 @@ vector_init_x = (1, 0, 0)
 vector_init_y = (0, 1, 0)
 vector_init_z = (0, 0, 1)
 vector_object = (a, b, c)
-    
+
 def rotation_matrix_3x3_from_vectors(vec1, vec2):
     """ Find the rotation matrix that aligns vec1 to vec2
     :param vec1: A 3d "source" vector
@@ -41,9 +41,11 @@ def rotation_matrix_3x3_from_vectors(vec1, vec2):
     """
     a, b = (vec1 / np.linalg.norm(vec1)).reshape(3), (vec2 / np.linalg.norm(vec2)).reshape(3)
     v = np.cross(a, b)
+
     if any(v): #if not all zeros then 
         c = np.dot(a, b)
         s = np.linalg.norm(v)
+        
         kmat = np.array([[0, -v[2], v[1]], [v[2], 0, -v[0]], [-v[1], v[0], 0]])
         return np.eye(3) + kmat + kmat.dot(kmat) * ((1 - c) / (s ** 2))
 
@@ -64,7 +66,7 @@ mat = rotation_matrix_3x3_from_vectors(vector_object, vector_init_z)
 print(mat)
 # vec_rot = mat.dot(vector_object)
 
-vec_trans = transform_matrix_from_vector(vector_object)
+vec_trans = transform_matrix_from_vector(vector_object, (0, 0, 1))
 print(vec_trans)
 
 # pcd after rotation
@@ -73,6 +75,8 @@ print("pcd after rotation: ", np.asarray(pcd.transform(vec_trans)))
 
 o3d.visualization.draw_geometries([plane_pcd])
 pcd_rotation = plane_pcd.transform(vec_trans)
+# visualize rotaion
+o3d.visualization.draw_geometries([pcd_rotation])
 # plane segmentaion
 
 plane_model, inliers = pcd_rotation.segment_plane(distance_threshold=0.01,
