@@ -40,23 +40,6 @@ def crop_point_cloud(pcd, range_x: list, range_y: list, range_z: list) -> o3d.ge
     # cropPCD.points = o3d.utility.Vector3dVector(n_xyz[mask])
     return cropPCD
 
-
-def Rx(theta):
-    return np.array([[1, 0, 0],
-                     [0, math.cos(theta), -math.sin(theta)],
-                     [0, math.sin(theta), math.cos(theta)]])
-
-def Ry(theta):
-    return np.array([[math.cos(theta), 0, math.sin(theta)],
-                     [0, 1, 0],
-                     [-math.sin(theta), 0, math.cos(theta)]])
-
-def Rz(theta):
-    return np.array([[math.cos(theta), -math.sin(theta), 0],
-                     [math.sin(theta), math.cos(theta), 0],
-                     [0, 0, 1]])
-
-
 # vector_init_x = (1, 0, 0)
 # vector_init_y = (0, 1, 0)
 # vector_init_z = (0, 0, 1)
@@ -101,6 +84,27 @@ def transform_matrix_from_vector(vec, axis=(0, 0, 1)):
 # # pcd after rotation
 # print("pcd before rotation: ", np.asarray(pcd.points))
 # print("pcd after rotation: ", np.asarray(pcd.transform(vec_trans)))
+
+
+def translate_matrix_from_vector(vector_object, vector_init):
+    """
+    Translate matrix from vector.
+    """
+    mat = np.eye(4)
+    # mat[:3, 3] = np.array(vector_object) - np.array(vector_init)
+    # mat = np.hstack((mat, np.array([0, 0, 0, 1])))
+    mat[:3, 3] = np.array(vector_object) - np.array(vector_init)
+    return mat
+
+# mat_strans = translate_matrix_from_vector(vector_object, vector_init_z)
+# print(mat_strans.shape)
+# # print(np.array(vector_object).shape)
+
+# # vec_strans = mat_strans.dot(vector_object)
+
+# # pcd
+# print("pcd before rotation: ", np.asarray(pcd))
+# print("pcd after rotation: ", np.asarray(pcd.transform(mat_strans)))
 
 
 def plane_seg(pcd, 
