@@ -32,7 +32,31 @@ vector_init_x = (1, 0, 0)
 vector_init_y = (0, 1, 0)
 vector_init_z = (0, 0, 1)
 vector_object = (a, b, c)
-    
+
+
+
+def translate_matrix_from_vector(vector_object, vector_init):
+    """
+    Translate matrix from vector.
+    """
+    mat = np.eye(4)
+    # mat[:3, 3] = np.array(vector_object) - np.array(vector_init)
+    # mat = np.hstack((mat, np.array([0, 0, 0, 1])))
+    mat[:3, 3] = np.array(vector_object) - np.array(vector_init)
+    return mat
+
+mat_strans = translate_matrix_from_vector(vector_object, vector_init_z)
+print(mat_strans.shape)
+# print(np.array(vector_object).shape)
+
+# vec_strans = mat_strans.dot(vector_object)
+
+# pcd
+print("pcd before rotation: ", np.asarray(pcd))
+print("pcd after rotation: ", np.asarray(pcd.transform(mat_strans)))
+
+
+
 def rotation_matrix_3x3_from_vectors(vec1, vec2):
     """ Find the rotation matrix that aligns vec1 to vec2
     :param vec1: A 3d "source" vector
@@ -41,9 +65,11 @@ def rotation_matrix_3x3_from_vectors(vec1, vec2):
     """
     a, b = (vec1 / np.linalg.norm(vec1)).reshape(3), (vec2 / np.linalg.norm(vec2)).reshape(3)
     v = np.cross(a, b)
+
     if any(v): #if not all zeros then 
         c = np.dot(a, b)
         s = np.linalg.norm(v)
+        
         kmat = np.array([[0, -v[2], v[1]], [v[2], 0, -v[0]], [-v[1], v[0], 0]])
         return np.eye(3) + kmat + kmat.dot(kmat) * ((1 - c) / (s ** 2))
 
@@ -61,25 +87,26 @@ def transform_matrix_from_vector(vec, axis=(0, 0, 1)):
     
 
 mat = rotation_matrix_3x3_from_vectors(vector_object, vector_init_z)
-print(mat)
+print(mat.shape)
 # vec_rot = mat.dot(vector_object)
 
-vec_trans = transform_matrix_from_vector(vector_object)
-print(vec_trans)
+vec_trans = transform_matrix_from_vector(vector_object, (0, 0, 1))
+print(vec_trans.shape)
 
 # pcd after rotation
-print("pcd before rotation: ", np.asarray(pcd.points))
+print("pcd before rotation: ", np.asarray(pcd))
 print("pcd after rotation: ", np.asarray(pcd.transform(vec_trans)))
 
-o3d.visualization.draw_geometries([plane_pcd])
-pcd_rotation = plane_pcd.transform(vec_trans)
-# plane segmentaion
+# o3d.visualization.draw_geometries([plane_pcd])
+# pcd_rotation = plane_pcd.transform(vec_trans)
+# # visualize rotaion
+# o3d.visualization.draw_geometries([pcd_rotation])
+# # plane segmentaion
 
-plane_model, inliers = pcd_rotation.segment_plane(distance_threshold=0.01,
-                                                ransac_n=3,
-                                                num_iterations=1000)
+# plane_model, inliers = pcd_rotation.segment_plane(distance_threshold=0.01,
+#                                                 ransac_n=3,
+#                                                 num_iterations=1000)
 
-[a, b, c, d] = plane_model           
-print(f"Plane equation:{a:.5f}x + {b:.5f}y + {c:.5f}z + {d:.5f} = 0")
+# [a, b, c, d] = plane_model           
+# print(f"Plane equation:{a:.5f}x + {b:.5f}y + {c:.5f}z + {d:.5f} = 0")
 # output Plane equation:0.00008x + -0.00003y + 1.00000z + 0.23855 = 0
-

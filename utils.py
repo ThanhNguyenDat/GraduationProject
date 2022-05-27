@@ -40,28 +40,71 @@ def crop_point_cloud(pcd, range_x: list, range_y: list, range_z: list) -> o3d.ge
     # cropPCD.points = o3d.utility.Vector3dVector(n_xyz[mask])
     return cropPCD
 
+# vector_init_x = (1, 0, 0)
+# vector_init_y = (0, 1, 0)
+# vector_init_z = (0, 0, 1)
+# vector_object = (a, b, c)
 
-def Rx(theta):
-    return np.array([[1, 0, 0],
-                     [0, math.cos(theta), -math.sin(theta)],
-                     [0, math.sin(theta), math.cos(theta)]])
+def rotation_matrix_3x3_from_vectors(vec1, vec2):
+    """ Find the rotation matrix that aligns vec1 to vec2
+    :param vec1: A 3d "source" vector
+    :param vec2: A 3d "destination" vector
+    :return mat: A transform matrix (3x3) that maps vec1 to vec2
+    """
+    a, b = (vec1 / np.linalg.norm(vec1)).reshape(3), (vec2 / np.linalg.norm(vec2)).reshape(3)
+    v = np.cross(a, b)
 
-def Ry(theta):
-    return np.array([[math.cos(theta), 0, math.sin(theta)],
-                     [0, 1, 0],
-                     [-math.sin(theta), 0, math.cos(theta)]])
+    if any(v): #if not all zeros then 
+        c = np.dot(a, b)
+        s = np.linalg.norm(v)
+        
+        kmat = np.array([[0, -v[2], v[1]], [v[2], 0, -v[0]], [-v[1], v[0], 0]])
+        return np.eye(3) + kmat + kmat.dot(kmat) * ((1 - c) / (s ** 2))
 
-def Rz(theta):
-    return np.array([[math.cos(theta), -math.sin(theta), 0],
-                     [math.sin(theta), math.cos(theta), 0],
-                     [0, 0, 1]])
+    else:
+        return np.eye(3)
+
+def transform_matrix_from_vector(vec, axis=(0, 0, 1)):
+    """ Find the transform matrix that aligns vec1 to vec2
+    :param vec: A 3d "source" vector
+    :return mat: A transform matrix (4x4) that maps vec1 to vec2
+    """
+    mat = np.eye(4)
+    mat[:3,:3] = rotation_matrix_3x3_from_vectors(vec, axis)
+    return mat
+    
+
+# mat = rotation_matrix_3x3_from_vectors(vector_object, vector_init_z)
+# print(mat)
+# # vec_rot = mat.dot(vector_object)
+
+# vec_trans = transform_matrix_from_vector(vector_object, (0, 0, 1))
+# print(vec_trans)
+
+# # pcd after rotation
+# print("pcd before rotation: ", np.asarray(pcd.points))
+# print("pcd after rotation: ", np.asarray(pcd.transform(vec_trans)))
 
 
-def create_point_cloud_rotation(pcd, rotation_matrix) -> o3d.geometry.PointCloud():
-    n_xyz = np.asarray(pcd.points)
-    n_xyz_rotated = np.dot(n_xyz, rotation_matrix)
-    pcd_rotated = create_pcd(n_xyz_rotated)
-    return pcd_rotated
+def translate_matrix_from_vector(vector_object, vector_init):
+    """
+    Translate matrix from vector.
+    """
+    mat = np.eye(4)
+    # mat[:3, 3] = np.array(vector_object) - np.array(vector_init)
+    # mat = np.hstack((mat, np.array([0, 0, 0, 1])))
+    mat[:3, 3] = np.array(vector_object) - np.array(vector_init)
+    return mat
+
+# mat_strans = translate_matrix_from_vector(vector_object, vector_init_z)
+# print(mat_strans.shape)
+# # print(np.array(vector_object).shape)
+
+# # vec_strans = mat_strans.dot(vector_object)
+
+# # pcd
+# print("pcd before rotation: ", np.asarray(pcd))
+# print("pcd after rotation: ", np.asarray(pcd.transform(mat_strans)))
 
 
 def plane_seg(pcd, 
