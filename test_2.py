@@ -5,6 +5,9 @@ import open3d as o3d
 from config import *
 from utils import *
 
+
+
+
 pcd = o3d.io.read_point_cloud('./2.ply')
 o3d.visualization.draw_geometries([pcd])
 
@@ -26,7 +29,7 @@ vector_object = [a, b, c]
 plane_pcd = pcd.select_by_index(inliers)
 points_plane = np.asarray(plane_pcd.points)
 
-o3d.visualization.draw_geometries([plane_pcd])
+# o3d.visualization.draw_geometries([plane_pcd])
 
 # get base vector
 vector_init_x = [1, 0, 0]
@@ -42,8 +45,8 @@ vector_robot = [0., 0.07, 0.35]
 mat = rotation_matrix_3x3_from_vectors(vector_object, vector_init_z)
 
 vec_transform = transform_matrix_from_vector(vector_object, vector_init_z)
-
-pcd_rotation_z = downPCD.transform(vec_transform)
+pcd_rotation_z = downPCD.rotate(mat)
+# pcd_rotation_z = downPCD.transform(vec_transform)
 
 # visualize rotaion
 o3d.visualization.draw_geometries([pcd_rotation_z])
@@ -58,60 +61,45 @@ plane_model, inliers = pcd_rotation_z.segment_plane(distance_threshold=0.01,
 print(f"Plane equation after rotation z axis:{a:.5f}x + {b:.5f}y + {c:.5f}z + {d:.5f} = 0")
 
 vector_object = [a, b, c]
-# convert to robot coordinate
-# translate matrix from vector object to vector robot
-mat_translate = translate_matrix_from_vector(vector_object, vector_robot)
 
-# transform pcd
-pcd_translate = pcd_rotation_z.transform(mat_translate)
+def convert_object_to_camera(vector_object, vector_robot):
+    # convert to camera coordinate
+    mat = np.eye(4)
+    mat[:3, 3] = get_vector_init(vector_object, vector_robot)
+    mat[:3,:3] = rotation_matrix_3x3_from_vectors(vector_object, vector_robot)
+    return mat
 
-o3d.visualization.draw_geometries([pcd_translate])
+mat = convert_object_to_camera(vector_object, vector_robot)
+print("mat: ", mat)
 
-# segmentation
-plane_model, inliers = pcd_translate.segment_plane(distance_threshold=0.01,
+# transform point cloud
+pcd_transform = pcd_rotation_z.transform(mat)
+o3d.visualization.draw_geometries([pcd_transform])
+
+plane_model, inliers = pcd_transform.segment_plane(distance_threshold=0.01,
                                                 ransac_n=3,
                                                 num_iterations=1000)
     
 [a, b, c, d] = plane_model           
-print(f"Plane equation after translate robot:{a:.5f}x + {b:.5f}y + {c:.5f}z + {d:.5f} = 0")
-print("Matrix translate: ", mat_translate)
-
+print(f"Plane equation after rotation z axis:{a:.5f}x + {b:.5f}y + {c:.5f}z + {d:.5f} = 0")
 vector_object = [a, b, c]
-vector_robot = [0., 0.07, 0.35]
-# convert to robot coordinate
 
-# roation matrix from vector object to vector robot
+# rotation to robot coordinate
+# mat = convert_object_to_camera(vector_object, vector_robot)
 mat = rotation_matrix_3x3_from_vectors(vector_object, vector_robot)
-print("Matrix rotation: ", mat)
+# vec_trans = transform_matrix_from_vector(vector_object, vector_robot)
+# pcd_rotation_z = pcd_transform.transform(vec_trans)
+pcd_rotation_z = pcd_transform.rotate(mat)
+o3d.visualization.draw_geometries([pcd_rotation_z])
 
-vec_transform = transform_matrix_from_vector(vector_object, vector_robot)
-print("Matrix transform: ", vec_transform)
-
-pcd_rotation_robot = pcd_translate.transform(vec_transform)
-
-# visualize rotaion
-o3d.visualization.draw_geometries([pcd_rotation_robot])
-
-# segmentation
-plane_model, inliers = pcd_rotation_robot.segment_plane(distance_threshold=0.01,
+plane_model, inliers = pcd_rotation_z.segment_plane(distance_threshold=0.01,
                                                 ransac_n=3,
                                                 num_iterations=1000)
     
 [a, b, c, d] = plane_model           
-print(f"Plane equation rotaion robot:{a:.5f}x + {b:.5f}y + {c:.5f}z + {d:.5f} = 0")
+print(f"Plane equation after rotation z axis:{a:.5f}x + {b:.5f}y + {c:.5f}z + {d:.5f} = 0")
 
-
-
-
-
-
-# mat_strans = translate_matrix_from_vector(vector_object, vector_init_z)
-# print(mat_strans.shape)
-# # print(np.array(vector_object).shape)
-
-# # vec_strans = mat_strans.dot(vector_object)
-
-# # pcd
-# print("pcd before rotation: ", np.asarray(pcd))
-# print("pcd after rotation: ", np.asarray(pcd.transform(mat_strans)))
+vecotr_robot = 0 , 0, 0
+vector_camera = 10, 10, 10
+vecotr_obj = 10, 10, 0
 

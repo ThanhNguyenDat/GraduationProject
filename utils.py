@@ -56,21 +56,30 @@ def rotation_matrix_3x3_from_vectors(vec1, vec2):
 
     if any(v): #if not all zeros then 
         c = np.dot(a, b)
-        s = np.linalg.norm(v)
+        s = np.linalg.norm(v) # Equal euclidean distance
         
+        # get theta angle
+        # theta = np.arccos(c)
+        # if s < 0:
+        #    theta = -theta
+        # get the axis
+        # v = v / s
+        # get the rotation matrix
+        # mat = np.eye(3) + np.sin(theta) * np.vstack((v, -v)) + (1 - np.cos(theta)) * np.dot(v, v)
+            
         kmat = np.array([[0, -v[2], v[1]], [v[2], 0, -v[0]], [-v[1], v[0], 0]])
         return np.eye(3) + kmat + kmat.dot(kmat) * ((1 - c) / (s ** 2))
 
     else:
         return np.eye(3)
 
-def transform_matrix_from_vector(vec, axis=(0, 0, 1)):
+def transform_matrix_from_vector(vec1, vec2=[0, 0, 1]):
     """ Find the transform matrix that aligns vec1 to vec2
     :param vec: A 3d "source" vector
     :return mat: A transform matrix (4x4) that maps vec1 to vec2
     """
     mat = np.eye(4)
-    mat[:3,:3] = rotation_matrix_3x3_from_vectors(vec, axis)
+    mat[:3,:3] = rotation_matrix_3x3_from_vectors(vec1, vec2)
     return mat
     
 
@@ -85,15 +94,21 @@ def transform_matrix_from_vector(vec, axis=(0, 0, 1)):
 # print("pcd before rotation: ", np.asarray(pcd.points))
 # print("pcd after rotation: ", np.asarray(pcd.transform(vec_trans)))
 
+def get_vector_init(vector_object, vector_target):
+    """
+    Get the vector init.
+    """
+    return  np.array(vector_target) - np.array(vector_object)
 
-def translate_matrix_from_vector(vector_object, vector_init):
+def translate_matrix_from_vector(vector_object, vector_target):
     """
     Translate matrix from vector.
     """
+    vector_init = get_vector_init(vector_object, vector_target)
     mat = np.eye(4)
     # mat[:3, 3] = np.array(vector_object) - np.array(vector_init)
     # mat = np.hstack((mat, np.array([0, 0, 0, 1])))
-    mat[:3, 3] = np.array(vector_object) - np.array(vector_init)
+    mat[:3, 3] = vector_init#np.array(vector_object) - np.array(vector_init)
     return mat
 
 # mat_strans = translate_matrix_from_vector(vector_object, vector_init_z)
@@ -106,6 +121,12 @@ def translate_matrix_from_vector(vector_object, vector_init):
 # print("pcd before rotation: ", np.asarray(pcd))
 # print("pcd after rotation: ", np.asarray(pcd.transform(mat_strans)))
 
+def convert_object_to_camera(vector_object, vector_robot):
+    # convert to camera coordinate
+    mat = np.eye(4)
+    mat[:3, 3] = get_vector_init(vector_object, vector_robot)
+    mat[:3,:3] = rotation_matrix_3x3_from_vectors(vector_object, vector_robot)
+    return mat
 
 def plane_seg(pcd, 
             threshold_points=100, 

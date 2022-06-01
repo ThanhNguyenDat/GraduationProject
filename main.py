@@ -37,16 +37,7 @@ def main(opt):
     # print("theta: ", theta)
 
     # Rotation Rz
-    rotation_z = Rz(theta=30)
-    print("rotation z: ", rotation_z)
-
-    # rotate the point cloud
-    rotatePCD = create_point_cloud_rotation(cropPCD, rotation_z)
-    print("rotatePCD: ", rotatePCD.points)
-
-    o3d.visualization.draw_geometries([cropPCD])
-    o3d.visualization.draw_geometries([rotatePCD])
-    o3d.visualization.draw_geometries([rotatePCD, cropPCD])
+    
     print("PCD: ", cropPCD.points)
     # if opt.visual:
     #     o3d.visualization.draw_geometries([rotatePCD])
