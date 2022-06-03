@@ -81,7 +81,14 @@ def transform_matrix_from_vector(vec1, vec2=[0, 0, 1]):
     mat = np.eye(4)
     mat[:3,:3] = rotation_matrix_3x3_from_vectors(vec1, vec2)
     return mat
+
+def Rx(matrix_1, matrix_2):
+    """
+    Rotaion matrix x axis 
+    """
+    matrix = 
     
+
 
 # mat = rotation_matrix_3x3_from_vectors(vector_object, vector_init_z)
 # print(mat)
@@ -121,7 +128,7 @@ def translate_matrix_from_vector(vector_object, vector_target):
 # print("pcd before rotation: ", np.asarray(pcd))
 # print("pcd after rotation: ", np.asarray(pcd.transform(mat_strans)))
 
-def convert_object_to_camera(vector_object, vector_robot):
+def convert_object_to_robot(vector_object, vector_robot):
     # convert to camera coordinate
     mat = np.eye(4)
     mat[:3, 3] = get_vector_init(vector_object, vector_robot)

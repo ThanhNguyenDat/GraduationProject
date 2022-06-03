@@ -44,9 +44,10 @@ box.rotate(_mat, center=box.get_center())
 # rotaion coordinate box to the random angle
 object_coordinate.rotate(_mat, center=box.get_center())
 # object_coordinate.transform(_mat)
-# init 
+
+# init box
 o3d.visualization.draw_geometries([box, robot_coordinate, camera_coordinate, object_coordinate])
-# DONE INIT
+######### DONE INIT
 
 
 def compute_theta_between_vectors(v1, v2):
