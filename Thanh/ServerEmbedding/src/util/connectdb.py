@@ -27,10 +27,11 @@ class ConnectDB:
         except Error as e:
             print("Error while connecting to MySQL", e)
 
-    def create_table(self):
+    def create_table_controll(self, tabel_name="Controll"):
+
         try:
             self.__init__()
-            sql = """CREATE TABLE IF NOT EXISTS Controll (
+            sql = """CREATE TABLE IF NOT EXISTS %s (
                 id INT NOT NULL AUTO_INCREMENT,
                 theta_1 FLOAT,
                 theta_2 FLOAT,
@@ -48,7 +49,7 @@ class ConnectDB:
                 vitri_z FLOAT,
                 PRIMARY KEY (id)
             )
-            ENGINE = InnoDB;"""
+            ENGINE = InnoDB;""" % tabel_name
             self.cursor.execute(sql)
             self.connection.commit()
             print("Table created successfully")
@@ -57,12 +58,47 @@ class ConnectDB:
         finally:
             self.cursor.close()
 
-    def insert_data(self, data):
+    def create_table_motor_default(self, tabel_name="MotorDefault"):
+        try:
+            self.__init__()
+            sql = """CREATE TABLE IF NOT EXISTS %s (
+                id INT NOT NULL AUTO_INCREMENT,
+                theta_1 FLOAT,
+                theta_2 FLOAT,
+                theta_3 FLOAT,
+                theta_4 FLOAT,
+                theta_5 FLOAT,
+                w_1 FLOAT,
+                w_2 FLOAT,
+                w_3 FLOAT,
+                w_4 FLOAT,
+                w_5 FLOAT,
+                mode VARCHAR(255) NOT NULL,
+                vitri_x FLOAT NOT NULL,
+                vitri_y FLOAT NOT NULL,
+                vitri_z FLOAT NOT NULL,
+                position VARCHAR(255) NOT NULL,
+                velocity VARCHAR(255) NOT NULL,
+                PRIMARY KEY (id)
+            )
+            ENGINE = InnoDB;""" % tabel_name
+            self.cursor.execute(sql)
+            self.connection.commit()
+            print("Table created successfully")
+        except Error as e:
+            print("Error while creating table", e)
+        finally:
+            self.cursor.close()
+
+    def insert_data(self, data, table_name="Controll"):
         try:
             self.__init__()
             if type(data) != type(list):
                 data = list(data)
-            sql = """INSERT INTO Controll(theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, mode, vitri_x, vitri_y, vitri_z) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+            if table_name == "Controll":
+                sql = """INSERT INTO Controll (theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, mode, vitri_x, vitri_y, vitri_z) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+            elif table_name == "MotorDefault":
+                sql = """INSERT INTO MotorDefault (theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, mode, vitri_x, vitri_y, vitri_z, position, velocity) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
             self.cursor.execute(sql, data)
             self.connection.commit()
             print("Data inserted successfully")
@@ -162,3 +198,13 @@ class ConnectDB:
             print("Error while showing data", e)
         finally:
             self.cursor.close()
+
+# ConnectDB = ConnectDB()
+# ConnectDB.create_table_controll()
+# ConnectDB.create_table_motor_default()
+# # insert data into table Controll
+# data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "mode2", 1, 2, 3, "position2", 'velocity2']
+# data = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, "mode1", 1, 2, 3, "position1", 'velocity1']
+# ConnectDB.insert_data(data, table_name="MotorDefault")
+# data = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, "mode3", 1, 2, 3, "position3", 'velocity3']
+# ConnectDB.insert_data(data, table_name="MotorDefault")
