@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="container ">
+    <div class="row">
+        <div class="col-md-12">
+            
+            <table class="table table-bordered text-white bg-dark"" id="setpointtable">
+                <label >Set Point</label>
+                <thead>
+                    <tr>
+                        <th>vitri_x</th>
+                        <th>vitri_y</th>
+                        <th>vitri_z</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% if result %}
+                        <tr>
+                            <td><input type="text" placeholder="{{ result[12] }}" ></td>
+                            <td><input type="text" placeholder="{{ result[13] }}" ></td>
+                            <td><input type="text" placeholder="{{ result[14] }}" ></td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+
+            
+            <table class="table table-bordered text-white bg-dark" id="currenttalbe">
+                <label>Current</label>
+                <thead>
+                    <tr>
+                        <th>vitri_x</th>
+                        <th>vitri_y</th>
+                        <th>vitri_z</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% if result %}
+                        <tr>
+                            <td>{{ result[12] }}</td>
+                            <td>{{ result[13] }}</td>
+                            <td>{{ result[14] }}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- submit button -->
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function(){
+        $('#setpointtable').DataTable();
+        $('#currenttalbe').DataTable();
+    });
+    // process for submit button
+    $('button').click(function(){
+        var setpoint = {};
+        setpoint.vitri_x = $('#setpointtable tbody tr td input').eq(0).val();
+        setpoint.vitri_y = $('#setpointtable tbody tr td input').eq(1).val();
+        setpoint.vitri_z = $('#setpointtable tbody tr td input').eq(2).val();
+        $.ajax({
+            url: '/control/setpoint',
+            type: 'POST',
+            data: setpoint,
+            success: function(data){
+                console.log(data);
+            }
+        });
+    });
+</script>
+
+{% endblock %}
