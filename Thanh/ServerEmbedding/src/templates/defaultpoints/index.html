@@ -5,21 +5,39 @@
     <div class="row">
         <div class="col-md-12">
             <table class="table table-bordered text-white bg-dark" id="currenttalbe">
-                <label>Current</label>
+                <h1>Default Points</h1>
+                <!-- insert btn -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="{{ url_for('add_defaultpoints') }}" class="btn btn-primary">Add</a>
+                    </div>
+                </div>
                 <thead>
                     <tr>
                         <th>vitri_x</th>
                         <th>vitri_y</th>
                         <th>vitri_z</th>
+                        <th>position</th>
+                        <th>velocity</th>
+                        <th></th>
                     </tr>
                 </thead>
                 
                 <tbody>
                     {% for result in results %}
                         <tr>
+                            <td hidden="true">{{ result[0] }}</td>
                             <td>{{ result[12] }}</td>
                             <td>{{ result[13] }}</td>
                             <td>{{ result[14] }}</td>
+                            <td>{{ result[15] }}</td>
+                            <td>{{ result[16] }}</td>
+                            <td>
+                                <a href="/controll" class="btn btn-primary">Submit</a>
+                                <a href="{{ url_for('edit_defaultpoints', id=result[0]) }}" class="btn btn-primary">Edit</a>
+
+                                <a href="{{ url_for('delete_defaultpoints', id=result[0]) }}" class="btn btn-danger">Delete</a>
+                            </td>
                         </tr>
                     {% endfor %}
                     

@@ -2,3 +2,4 @@ wheel
 gunicorn
 flask
 mysql-connector-python
+numpy

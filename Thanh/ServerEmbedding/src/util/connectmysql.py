@@ -43,10 +43,10 @@ class ConnectDB:
                 w_3 FLOAT,
                 w_4 FLOAT,
                 w_5 FLOAT,
-                mode VARCHAR(255) NOT NULL,
-                vitri_x FLOAT,
-                vitri_y FLOAT,
-                vitri_z FLOAT,
+                mode VARCHAR(255),
+                vitri_x FLOAT NOT NULL,
+                vitri_y FLOAT NOT NULL,
+                vitri_z FLOAT NOT NULL,
                 PRIMARY KEY (id)
             )
             ENGINE = InnoDB;""" % tabel_name
@@ -73,7 +73,7 @@ class ConnectDB:
                 w_3 FLOAT,
                 w_4 FLOAT,
                 w_5 FLOAT,
-                mode VARCHAR(255) NOT NULL,
+                mode VARCHAR(255),
                 vitri_x FLOAT NOT NULL,
                 vitri_y FLOAT NOT NULL,
                 vitri_z FLOAT NOT NULL,
@@ -90,9 +90,10 @@ class ConnectDB:
         finally:
             self.cursor.close()
 
-    def insert_data(self, data, table_name="Controll"):
+    def insert_data(self, data, table_name="Controll", sql : str = None):
         try:
             self.__init__()
+            
             if type(data) != type(list):
                 data = list(data)
             if table_name == "Controll":
@@ -100,6 +101,7 @@ class ConnectDB:
             elif table_name == "MotorDefault":
                 sql = """INSERT INTO MotorDefault (theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, mode, vitri_x, vitri_y, vitri_z, position, velocity) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
             self.cursor.execute(sql, data)
+            
             self.connection.commit()
             print("Data inserted successfully")
         except Error as e:
@@ -107,12 +109,15 @@ class ConnectDB:
         finally:
             self.cursor.close()
 
-    def update_data(self, data):
+    def update_data(self, id, data, name_database='Controll'):
         if type(data) != type(list):
             data = list(data)
         try:
             self.__init__()
-            sql = """UPDATE Controll SET theta_1 = %s, theta_2 = %s, theta_3 = %s, theta_4 = %s, theta_5 = %s, w_1 = %s, w_2 = %s, w_3 = %s, w_4 = %s, w_5 = %s, mode = %s, vitri_x = %s, vitri_y = %s, vitri_z = %s WHERE id = %s"""
+            if name_database == "Controll":
+                sql = """UPDATE Controll SET theta_1 = %s, theta_2 = %s, theta_3 = %s, theta_4 = %s, theta_5 = %s, w_1 = %s, w_2 = %s, w_3 = %s, w_4 = %s, w_5 = %s, mode = %s, vitri_x = %s, vitri_y = %s, vitri_z = %s WHERE id = """ + str(id)
+            elif name_database == "MotorDefault":
+                sql = """UPDATE MotorDefault SET theta_1 = %s, theta_2 = %s, theta_3 = %s, theta_4 = %s, theta_5 = %s, w_1 = %s, w_2 = %s, w_3 = %s, w_4 = %s, w_5 = %s, mode = %s, vitri_x = %s, vitri_y = %s, vitri_z = %s, position = %s, velocity = %s WHERE id = """ + str(id)
             self.cursor.execute(sql, data)
             self.connection.commit()
             print("Data updated successfully")
@@ -121,14 +126,17 @@ class ConnectDB:
         finally:
             self.cursor.close()
 
-    def delete_data_by_id(self, id):
+    def delete_data_by_id(self, id, name_database='Controll'):
         #  convert id to list
         id = str(id)
         if type(id) != type(list):
             id = list(id)
         try:
             self.__init__()
-            sql = """DELETE FROM Controll WHERE id = %s"""
+            if name_database == 'Controll':
+                sql = """DELETE FROM Controll WHERE id = %s"""
+            elif name_database == 'MotorDefault':
+                sql = """DELETE FROM MotorDefault WHERE id = %s"""
             self.cursor.execute(sql, id)
             self.connection.commit()
             print("Data deleted successfully")
@@ -186,11 +194,11 @@ class ConnectDB:
         finally:
             self.cursor.close()
 
-    def show_data(self, table="Controll"):
+    def show_data(self, table_name="Controll"):
         try:
             # check if table exists
             self.__init__()
-            sql = """SELECT * FROM %s""" % table
+            sql = """SELECT * FROM %s""" % table_name
             self.cursor.execute(sql)
             result = self.cursor.fetchall()
             return result
