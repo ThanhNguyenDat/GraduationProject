@@ -5,6 +5,7 @@ from calculate import cal_theta_1, cal_theta_2, cal_theta_3, cal_theta_4, cal_th
 # from sqlalchemy.orm import sessionmaker
 # from database_setup import Base, Controll
 from src.util.connectmysql import ConnectDB
+from calculate import *
 
 Connect = ConnectDB()
 Connect.create_table_controll()
@@ -66,11 +67,7 @@ def settheta():
     if request.method == 'POST':
         print("request.form: ", request.form)
         data = request.form
-        vitri_x = 1.0
-        vitri_y = 2.0
-        vitri_z = 3.0
-        phi = 4.0
-        gramma = 5.0
+        
         v = 6.0
 
         theta_1 = float(data['theta_1'])
@@ -78,6 +75,7 @@ def settheta():
         theta_3 = float(data['theta_3'])
         theta_4 = float(data['theta_4'])
         theta_5 = float(data['theta_5'])
+        vitri_x, vitri_y, vitri_z, phi, gramma = cal_pos_p(theta_1, theta_2, theta_3, theta_4, theta_5)
         w_1, w_2, w_3, w_4, w_5 = 6, 7, 8, 9, 10
 
         data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, vitri_x, vitri_y, vitri_z, phi, gramma, v]
@@ -115,6 +113,7 @@ def edit_defaultpoints(id):
         position = data['position']
         velocity = data['velocity']
         description = data['description']
+
         theta_1 = cal_theta_1(vitri_y, vitri_z)
         theta_5 = cal_theta_5(gramma, theta_1)
         
@@ -152,6 +151,7 @@ def add_position():
         velocity = data['velocity']
         v = data['v']
         description = data['description']
+
         theta_1 = cal_theta_1(vitri_y, vitri_z)
         theta_5 = cal_theta_5(gramma, theta_1)
 

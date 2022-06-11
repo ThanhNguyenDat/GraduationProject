@@ -1,9 +1,43 @@
 {% block css %}
 <link rel="stylesheet" type= "text/css" href="{{url_for('static', filename='home_page/style.css')}}" />
+<style>
+    h2 {
+        margin-top: auto;
+        text-align: center;
+        font-weight: bold;
+        margin-top: 1cm;
+    }
+    
+    h4 {
+        margin-top: auto;
+        text-align: center;
+        /* font-weight: bold; */
+        
+    }
+    
+    .infor {
+        margin-top: auto;
+        text-align: center;
+        font-weight: bold;
+        margin-top: 1cm;
+    }
+    .circular_image {
+        margin: auto;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: blue;
+        text-align: center;
+        justify-content: space-around;
+        margin-top: auto;
+        margin-bottom : auto;
+    }
+</style>
 {% endblock %}
 {% extends "layout.html" %} {% block title %}Home{% endblock %} 
 {% block content %}
-<div class="container" >
+<div class="container">
     <div class="row">
         <div class="col-md-12">
             <h1>Home Page</h1>
@@ -12,42 +46,9 @@
 
     <!-- import images -->
 
-    <div class="row">
+    <div class="container">
         <div style="display: flex; " >
-            <style>
-                h2 {
-                    margin-top: auto;
-                    text-align: center;
-                    font-weight: bold;
-                    margin-top: 1cm;
-                }
-                
-                h4 {
-                    margin-top: auto;
-                    text-align: center;
-                    /* font-weight: bold; */
-                    
-                }
-                
-                .infor {
-                    margin-top: auto;
-                    text-align: center;
-                    font-weight: bold;
-                    margin-top: 1cm;
-                }
-                .circular_image {
-                    margin: auto;
-                    width: 200px;
-                    height: 200px;
-                    border-radius: 50%;
-                    overflow: hidden;
-                    background-color: blue;
-                    text-align: center;
-                    justify-content: space-around;
-                    margin-top: auto;
-                    margin-bottom : auto;
-                }
-            </style>
+            
             <div class="col">
                 <div style="margin: auto;" class="circular_image">
                     <img src="{{ url_for('static', filename='home_page/images/Phuoc.jpg') }}" alt="home"

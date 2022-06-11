@@ -1,10 +1,10 @@
 import numpy as np
 
-a2 = np.random.randint(1)
-a3 = np.random.randint(1)
-a5 = np.random.randint(1)
-d1 = np.random.randint(1)
-d4 = np.random.randint(1)
+a2 = 100
+a3 = 100
+a5 = 100
+d1 = 100
+d4 = 100
 
     
 def cal_theta_2(x, y, z, theta_1):

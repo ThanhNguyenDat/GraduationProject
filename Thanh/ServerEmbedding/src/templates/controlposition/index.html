@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="{{url_for('static', filename='controlposition/style.css')}}" />
 {% endblock %}
 {% extends "layout.html" %}
-{% block title %}Controll{% endblock %}
+{% block title %}ControllPosition{% endblock %}
 {% block content %}
 <div class="container ">
     <div class="row">
@@ -24,16 +24,14 @@
                     </thead>
                     
                     <tbody>
-                        
                             <tr>
-                                <td><input type="text" placeholder="vi tri x" name="vitri_x" required></td>
-                                <td><input type="text" placeholder="vi tri y" name="vitri_y" required></td>
-                                <td><input type="text" placeholder="vi tri z" name="vitri_z" required></td>
-                                <td><input type="text" placeholder="phi" name="phi" required></td>
-                                <td><input type="text" placeholder="gramma" name="gramma" required></td>
+                                <td><input type="text" placeholder="vi tri x" name="vitri_x" for='irate' name='irate' required></td>
+                                <td><input type="text" placeholder="vi tri y" name="vitri_y" for='irate' name='irate' required></td>
+                                <td><input type="text" placeholder="vi tri z" name="vitri_z" for='irate' name='irate' required></td>
+                                <td><input type="text" placeholder="phi" name="phi" for='irate' name='irate' required></td>
+                                <td><input type="text" placeholder="gramma" name="gramma" for='irate' name='irate' required></td>
                                 <td><input type="text" placeholder="v" name="v" required></td>
                             </tr>
-                        
                     </tbody>
                 </table>
 
@@ -77,5 +75,5 @@
 
 {% endblock %}
 {% block script %}
-
+<script src="{{url_for('static', filename='controlposition/text_float.js')}}" type="text/javascript"></script>
 {% endblock %}
