@@ -1,35 +1,60 @@
+{% block css %}
+<link rel="stylesheet" href="{{url_for('static', filename='defaultpoints/style.css')}}" />
+{% endblock %}
+
 {% extends "layout.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
 <div class="container">
-<form action="{{ url_for('add_defaultpoints') }}" method="post" id="position" name="position">
-    <h1> Add Default Point </h1>
-    <table class="table table-bordered text-white bg-dark" id="setpointtable">
-        <label >Set Point</label>
-        <thead>
-            <tr>
-                <th>vitri_x</th>
-                <th>vitri_y</th>
-                <th>vitri_z</th>
-            </tr>
-        </thead>
-        
-        <tbody>
-            
-                <tr>
-                    <td><input type="text" placeholder="Vi tri x" name="vitri_x"></td>
-                    <td><input type="text" placeholder="Vi tri y" name="vitri_y"></td>
-                    <td><input type="text" placeholder="Vi tri z" name="vitri_z"></td>
-                </tr>
-            
-        </tbody>
-    </table>
-    <div class="row">
-        <div class="col-md-12">
-            <input type="submit" class="btn btn-primary" id="submit" value="Submit">
+    <form action="{{ url_for('add_defaultpoints') }}" method="post" id="position" name="position">
+        <h1> Add Default Point </h1>
+        <div class="container">
+            <div class="form-group" style="position: relative; top: 10px;">
+                <label for="vitri_x">Vi tri x</label>
+                <input type="text" class="form-control" id="vitri_x" name="vitri_x" placeholder="vi tri x" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 30px;">
+                <label for="vitri_y">Vi tri y</label>
+                <input type="text" class="form-control" id="vitri_y" name="vitri_y" placeholder="vi tri y" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 50px;">
+                <label for="vitri_z">Vi tri z</label>
+                <input type="text" class="form-control" id="vitri_z" name="vitri_z" placeholder="vi tri z" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 70px;">
+                <label for="phi">phi</label>
+                <input type="text" class="form-control" id="phi" name="phi" placeholder="phi" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 90px;">
+                <label for="gramma">Gramma</label>
+                <input type="text" class="form-control" id="gramma" name="gramma" placeholder="gramma" required>
+            </div>
+
+            <div class="form-group" style="position: relative; top: 110px;">
+                <label for="v">V</label>
+                <input type="text" class="form-control" id="v" name="v" placeholder="v" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 130px;">
+                <label for="position">Position</label>
+                <input type="text" class="form-control" id="position" name="position" placeholder="position" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 150px;">
+                <label for="velocity">Velocity</label>
+                <input type="text" class="form-control" id="velocity" name="velocity" placeholder="velocity" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 170px;">
+                <label for="acceleration">Description</label>
+                <input type="text" class="form-control" id="description" name="description" placeholder="description"
+                    required>
+            </div>
+
+            <div class="row" style="position: relative; top: 210px;">
+                <div class="col-md-12">
+                    <input type="submit" class="btn btn-primary" id="submit" value="Submit">
+                </div>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
 </div>
 {% endblock %}
 {% block script %}

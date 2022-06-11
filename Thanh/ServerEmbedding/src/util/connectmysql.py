@@ -13,7 +13,7 @@ class ConnectDB:
     def get_connection(self):
         try:
             connection = mysql.connector.connect(host='localhost',
-                                                 database='Doan',
+                                                 database='EmbServer',
                                                  user='root',
                                                  password='31072001')
             if connection.is_connected():
@@ -22,85 +22,94 @@ class ConnectDB:
                 cursor = connection.cursor()
                 cursor.execute("select database();")
                 record = cursor.fetchone()
-                # print("Your connected to database: ", record)
+                print("Your connected to database: ", record)
             return connection
         except Error as e:
             print("Error while connecting to MySQL", e)
 
-    def create_table_controll(self, tabel_name="Controll"):
+    def create_table_controll(self):
 
         try:
             self.__init__()
-            sql = """CREATE TABLE IF NOT EXISTS %s (
-                id INT NOT NULL AUTO_INCREMENT,
-                theta_1 FLOAT,
-                theta_2 FLOAT,
-                theta_3 FLOAT,
-                theta_4 FLOAT,
-                theta_5 FLOAT,
-                w_1 FLOAT,
-                w_2 FLOAT,
-                w_3 FLOAT,
-                w_4 FLOAT,
-                w_5 FLOAT,
-                mode VARCHAR(255),
-                vitri_x FLOAT NOT NULL,
-                vitri_y FLOAT NOT NULL,
-                vitri_z FLOAT NOT NULL,
-                PRIMARY KEY (id)
-            )
-            ENGINE = InnoDB;""" % tabel_name
+            sql = """CREATE TABLE IF NOT EXISTS Controll (
+                    id INT(11) NOT NULL AUTO_INCREMENT,
+                    theta_1 FLOAT(11) NOT NULL,
+                    theta_2 FLOAT(11) NOT NULL,
+                    theta_3 FLOAT(11) NOT NULL,
+                    theta_4 FLOAT(11) NOT NULL,
+                    theta_5 FLOAT(11) NOT NULL,
+                    w_1 FLOAT(11) NOT NULL,
+                    w_2 FLOAT(11) NOT NULL,
+                    w_3 FLOAT(11) NOT NULL,
+                    w_4 FLOAT(11) NOT NULL,
+                    w_5 FLOAT(11) NOT NULL,
+                    vitri_x FLOAT(11) NOT NULL,
+                    vitri_y FLOAT(11) NOT NULL,
+                    vitri_z FLOAT(11) NOT NULL,
+                    phi FLOAT(11) NOT NULL,
+                    gramma FLOAT(11) NOT NULL,
+                    v FLOAT(11) NOT NULL,
+                    PRIMARY KEY (id)
+                    )
+                    ENGINE=InnoDB;"""
             self.cursor.execute(sql)
             self.connection.commit()
             print("Table created successfully")
-        except Error as e:
-            print("Error while creating table", e)
-        finally:
-            self.cursor.close()
-
-    def create_table_motor_default(self, tabel_name="MotorDefault"):
-        try:
-            self.__init__()
-            sql = """CREATE TABLE IF NOT EXISTS %s (
-                id INT NOT NULL AUTO_INCREMENT,
-                theta_1 FLOAT,
-                theta_2 FLOAT,
-                theta_3 FLOAT,
-                theta_4 FLOAT,
-                theta_5 FLOAT,
-                w_1 FLOAT,
-                w_2 FLOAT,
-                w_3 FLOAT,
-                w_4 FLOAT,
-                w_5 FLOAT,
-                mode VARCHAR(255),
-                vitri_x FLOAT NOT NULL,
-                vitri_y FLOAT NOT NULL,
-                vitri_z FLOAT NOT NULL,
-                position VARCHAR(255) NOT NULL,
-                velocity VARCHAR(255) NOT NULL,
-                PRIMARY KEY (id)
-            )
-            ENGINE = InnoDB;""" % tabel_name
-            self.cursor.execute(sql)
-            self.connection.commit()
-            print("Table created successfully")
-        except Error as e:
-            print("Error while creating table", e)
-        finally:
-            self.cursor.close()
-
-    def insert_data(self, data, table_name="Controll", sql : str = None):
-        try:
-            self.__init__()
             
-            if type(data) != type(list):
-                data = list(data)
-            if table_name == "Controll":
-                sql = """INSERT INTO Controll (theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, mode, vitri_x, vitri_y, vitri_z) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-            elif table_name == "MotorDefault":
-                sql = """INSERT INTO MotorDefault (theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, mode, vitri_x, vitri_y, vitri_z, position, velocity) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-            self.cursor.execute(sql, data)
+        except Error as e:
+            print("Error while creating table", e)
+        finally:
+            self.cursor.close()
+
+    def create_table_motor_default(self):
+        try:
+            self.__init__()
+            sql = """CREATE TABLE IF NOT EXISTS MotorDefault (
+                    id INT(11) NOT NULL AUTO_INCREMENT,
+                    theta_1 FLOAT(11) NOT NULL,
+                    theta_2 FLOAT(11) NOT NULL,
+                    theta_3 FLOAT(11) NOT NULL,
+                    theta_4 FLOAT(11) NOT NULL,
+                    theta_5 FLOAT(11) NOT NULL,
+                    w_1 FLOAT(11) NOT NULL,
+                    w_2 FLOAT(11) NOT NULL,
+                    w_3 FLOAT(11) NOT NULL,
+                    w_4 FLOAT(11) NOT NULL,
+                    w_5 FLOAT(11) NOT NULL,
+                    vitri_x FLOAT(11) NOT NULL,
+                    vitri_y FLOAT(11) NOT NULL,
+                    vitri_z FLOAT(11) NOT NULL,
+                    phi FLOAT(11) NOT NULL,
+                    gramma FLOAT(11) NOT NULL,
+                    v FLOAT(11) NOT NULL,
+                    position FLOAT(11) NOT NULL,
+                    velocity FLOAT(11) NOT NULL,
+                    description VARCHAR(255) NOT NULL,
+                    PRIMARY KEY (id)
+                    )
+                    ENGINE=InnoDB;"""
+                    
+            self.cursor.execute(sql)
+            self.connection.commit()
+            print("Table created successfully")
+        except Error as e:
+            print("Error while creating table", e)
+        finally:
+            self.cursor.close()
+
+    def insert_data(self, data, table_name: str ="Controll", sql : str = None):
+        try:
+            self.__init__()
+            if data:
+                if type(data) != type(list):
+                    data = list(data)
+                if table_name == "Controll":
+                    sql = """INSERT INTO Controll (theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, vitri_x, vitri_y, vitri_z, phi, gramma, v) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                elif table_name == "MotorDefault":
+                    sql = """INSERT INTO MotorDefault (theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, vitri_x, vitri_y, vitri_z, phi, gramma, v, position, velocity, description) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                self.cursor.execute(sql, data)
+            elif sql:
+                self.cursor.execute(sql)
             
             self.connection.commit()
             print("Data inserted successfully")
@@ -115,9 +124,9 @@ class ConnectDB:
         try:
             self.__init__()
             if name_database == "Controll":
-                sql = """UPDATE Controll SET theta_1 = %s, theta_2 = %s, theta_3 = %s, theta_4 = %s, theta_5 = %s, w_1 = %s, w_2 = %s, w_3 = %s, w_4 = %s, w_5 = %s, mode = %s, vitri_x = %s, vitri_y = %s, vitri_z = %s WHERE id = """ + str(id)
+                sql = """UPDATE Controll SET theta_1 = %s, theta_2 = %s, theta_3 = %s, theta_4 = %s, theta_5 = %s, w_1 = %s, w_2 = %s, w_3 = %s, w_4 = %s, w_5 = %s, vitri_x = %s, vitri_y = %s, vitri_z = %s, phi = %s, gramma = %s, v = %s WHERE id = """ + str(id)
             elif name_database == "MotorDefault":
-                sql = """UPDATE MotorDefault SET theta_1 = %s, theta_2 = %s, theta_3 = %s, theta_4 = %s, theta_5 = %s, w_1 = %s, w_2 = %s, w_3 = %s, w_4 = %s, w_5 = %s, mode = %s, vitri_x = %s, vitri_y = %s, vitri_z = %s, position = %s, velocity = %s WHERE id = """ + str(id)
+                sql = """UPDATE MotorDefault SET theta_1 = %s, theta_2 = %s, theta_3 = %s, theta_4 = %s, theta_5 = %s, w_1 = %s, w_2 = %s, w_3 = %s, w_4 = %s, w_5 = %s, vitri_x = %s, vitri_y = %s, vitri_z = %s, phi = %s, gramma = %s, v = %s, position = %s, velocity = %s, description = %s WHERE id = """ + str(id)
             self.cursor.execute(sql, data)
             self.connection.commit()
             print("Data updated successfully")
@@ -210,6 +219,8 @@ class ConnectDB:
 # ConnectDB = ConnectDB()
 # ConnectDB.create_table_controll()
 # ConnectDB.create_table_motor_default()
+# result = ConnectDB.show_data()
+# print(result)
 # # insert data into table Controll
 # data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "mode2", 1, 2, 3, "position2", 'velocity2']
 # data = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, "mode1", 1, 2, 3, "position1", 'velocity1']

@@ -1,31 +1,43 @@
+{% block css %}
+    <link rel="stylesheet" href="{{url_for('static', filename='control/style.css')}}" />
+{% endblock %}
 {% extends "layout.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Controll{% endblock %}
 {% block content %}
 <div class="container ">
     <div class="row">
         <div class="col-md-12">
+            
             <form action="{{ url_for('controll') }}" method="post" id="position" name="position">
                 <h1> Controll Panel </h1>
-                <table class="table table-bordered text-white bg-dark" id="setpointtable">
+                <table class="table table-striped table-dark text-white bg-dark " id="setpointtable" >
                     <label >Set Point</label>
                     <thead>
-                        <tr>
-                            <th>vitri_x</th>
-                            <th>vitri_y</th>
-                            <th>vitri_z</th>
+                        <tr style="text-align: center;">
+                            <th>Vi tri x</th>
+                            <th>Vi tri y</th>
+                            <th>Vi tri z</th>
+                            <th>phi</th>
+                            <th>gramma</th>
+                            <th>v</th>
                         </tr>
                     </thead>
                     
                     <tbody>
-                        {% if result %}
+                        
                             <tr>
-                                <td><input type="text" placeholder="{{ result[12] }}" name="vitri_x"></td>
-                                <td><input type="text" placeholder="{{ result[13] }}" name="vitri_y"></td>
-                                <td><input type="text" placeholder="{{ result[14] }}" name="vitri_z"></td>
+                                <td><input type="text" placeholder="vi tri x" name="vitri_x" required></td>
+                                <td><input type="text" placeholder="vi tri y" name="vitri_y" required></td>
+                                <td><input type="text" placeholder="vi tri z" name="vitri_z" required></td>
+                                <td><input type="text" placeholder="phi" name="phi" required></td>
+                                <td><input type="text" placeholder="gramma" name="gramma" required></td>
+                                <td><input type="text" placeholder="v" name="v" required></td>
                             </tr>
-                        {% endif %}
+                        
                     </tbody>
                 </table>
+
+
                 <div class="row">
                     <div class="col-md-12">
                         <input type="submit" class="btn btn-primary" id="submit" value="Submit">
@@ -33,22 +45,28 @@
                 </div>
             </form>
             
-            <table class="table table-bordered text-white bg-dark" id="currenttalbe">
+            <table class="table table-striped table-dark text-white bg-dark" id="currenttalbe">
                 <label>Current</label>
                 <thead>
-                    <tr>
-                        <th>vitri_x</th>
-                        <th>vitri_y</th>
-                        <th>vitri_z</th>
+                    <tr style="text-align: center;">
+                        <th>Vi tri x</th>
+                        <th>Vi tri y</th>
+                        <th>Vi tri z</th>
+                        <th>phi</th>
+                        <th>gramma</th>
+                        <th>v</th>
                     </tr>
                 </thead>
                 
                 <tbody>
                     {% if result %}
-                        <tr>
+                        <tr style="text-align: center;">
+                            <td>{{ result[11] }}</td>
                             <td>{{ result[12] }}</td>
                             <td>{{ result[13] }}</td>
                             <td>{{ result[14] }}</td>
+                            <td>{{ result[15] }}</td>
+                            <td>{{ result[16] }}</td>
                         </tr>
                     {% endif %}
                 </tbody>

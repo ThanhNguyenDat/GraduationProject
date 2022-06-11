@@ -3,32 +3,49 @@
 {% block title %}Edit Motor Defaultpoints{% endblock %}
 {% block content %}
 <div class="container">
-    
-<form action="{{ url_for('edit_defaultpoints', id=id) }}" method="post">
-    <h1> Edit Default Point </h1>
-    
-    <div class="form-group">
-        <label for="vitri_x">vitri_x</label>
-        <input type="text" class="form-control" id="vitri_x" name="vitri_x" value="{{ result[12] }}">
-    </div>
-    <div class="form-group">
-        <label for="vitri_y">vitri_y</label>
-        <input type="text" class="form-control" id="vitri_y" name="vitri_y" value="{{ result[13] }}">
-    </div>
-    <div class="form-group">
-        <label for="vitri_z">vitri_z</label>
-        <input type="text" class="form-control" id="vitri_z" name="vitri_z" value="{{ result[14] }}">
-    </div>
-    <div class="form-group">
-        <label for="position">position</label>
-        <input type="text" class="form-control" id="position" name="position" value="{{ result[15] }}">
-    </div>
-    <div class="form-group">
-        <label for="velocity">velocity</label>
-        <input type="text" class="form-control" id="velocity" name="velocity" value="{{ result[16] }}">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    <form action="{{ url_for('edit_defaultpoints', id=id) }}" method="post">
+        <h1> Edit Default Point </h1>
+        <div class="container">
+            <div class="form-group" style="position: relative; top: 10px;">
+                <label for="vitri_x">Vi tri x</label>
+                <input type="text" class="form-control" id="vitri_x" name="vitri_x" value="{{ result[11] }}" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 30px;">
+                <label for="vitri_y">Vi tri y</label>
+                <input type="text" class="form-control" id="vitri_y" name="vitri_y" value="{{ result[12] }}" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 50px;">
+                <label for="vitri_z">Vi tri z</label>
+                <input type="text" class="form-control" id="vitri_z" name="vitri_z" value="{{ result[13] }}" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 70px;">
+                <label for="phi">Phi</label>
+                <input type="text" class="form-control" id="phi" name="phi" value="{{ result[14] }}" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 90px;">
+                <label for="grmama">Gramma</label>
+                <input type="text" class="form-control" id="gramma" name="gramma" value="{{ result[15] }}" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 110px;">
+                <label for="v">V</label>
+                <input type="text" class="form-control" id="v" name="v" value="{{ result[16] }}" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 130px;">
+                <label for="position">Position</label>
+                <input type="text" class="form-control" id="position" name="position" value="{{ result[17] }}" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 150px;">
+                <label for="velocity">Velocity</label>
+                <input type="text" class="form-control" id="velocity" name="velocity" value="{{ result[18] }}" required>
+            </div>
+            <div class="form-group" style="position: relative; top: 170px;">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" name="description" value="{{ result[18] }}"
+                    required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="position: relative; top: 190px;">Submit</button>
+        </div>
+    </form>
 </div>
 {% endblock %}
 {% block script %}

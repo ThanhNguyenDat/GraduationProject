@@ -23,8 +23,9 @@ def include_example():
 def controll():
     result = Connect.show_data()
     # get the lastest result from database
-    result = result[-1]
-    print("result: ", result)
+    if len(result) > 0:
+        result = result[-1]
+    print("Len result: ", len(result))
     return render_template('./control/index.html', result=result)
 
 @app.route('/controll', methods=['POST'])
@@ -35,14 +36,19 @@ def setposition():
         vitri_x = float(data['vitri_x'])
         vitri_y = float(data['vitri_y'])
         vitri_z = float(data['vitri_z'])
-
-        theta_1 = cal_theta_1(vitri_x, vitri_y, vitri_z)
+        phi = float(data['phi'])
+        gramma = float(data['gramma'])
+        v = float(data['v'])
+        theta_1 = cal_theta_1(vitri_y, vitri_z)
+        theta_5 = cal_theta_5(gramma, theta_1)
+        
         theta_2 = cal_theta_2(vitri_x, vitri_y, vitri_z, theta_1)
         theta_3 = cal_theta_3(vitri_x, vitri_y, vitri_z, theta_1, theta_2)
         theta_4 = cal_theta_4(vitri_x, vitri_y, vitri_z, theta_1, theta_2, theta_3)
-        theta_5 = cal_theta_5(vitri_x, vitri_y, vitri_z, theta_1, theta_2, theta_3, theta_4)
-        w_1, w_2, w_3, w_4, w_5, mode = 6, 7, 8, 9, 10, "mode1"
-        data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, mode, vitri_x, vitri_y, vitri_z]
+        
+        w_1, w_2, w_3, w_4, w_5 = 6, 7, 8, 9, 10
+
+        data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, vitri_x, vitri_y, vitri_z, phi, gramma, v]
         Connect.insert_data(data)
         return redirect(url_for('controll'))
 
@@ -70,16 +76,22 @@ def edit_defaultpoints(id):
         vitri_x = float(data['vitri_x'])
         vitri_y = float(data['vitri_y'])
         vitri_z = float(data['vitri_z'])
-        theta_1 = cal_theta_1(vitri_x, vitri_y, vitri_z)
+        phi = float(data['phi'])
+        gramma = float(data['gramma'])
+        v = data['v']
+        position = data['position']
+        velocity = data['velocity']
+        description = data['description']
+        theta_1 = cal_theta_1(vitri_y, vitri_z)
+        theta_5 = cal_theta_5(gramma, theta_1)
+        
         theta_2 = cal_theta_2(vitri_x, vitri_y, vitri_z, theta_1)
         theta_3 = cal_theta_3(vitri_x, vitri_y, vitri_z, theta_1, theta_2)
         theta_4 = cal_theta_4(vitri_x, vitri_y, vitri_z, theta_1, theta_2, theta_3)
-        theta_5 = cal_theta_5(vitri_x, vitri_y, vitri_z, theta_1, theta_2, theta_3, theta_4)
-        w_1, w_2, w_3, w_4, w_5, mode = 6, 7, 8, 9, 10, "mode1"
+        
+        w_1, w_2, w_3, w_4, w_5 = 6, 7, 8, 9, 10
 
-        position = data['position']
-        velocity = data['velocity']
-        data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, mode, vitri_x, vitri_y, vitri_z, position, velocity]
+        data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, vitri_x, vitri_y, vitri_z, phi, gramma, v, position, velocity, description]
         Connect.update_data(id, data, name_database="MotorDefault")
         return redirect(url_for('defaultpoints'))
 
@@ -98,17 +110,24 @@ def add_defaultpoints():
 def add_position():
     if request.method == 'POST':
         data = request.form
-        vitri_x = int(data['vitri_x'])
-        vitri_y = int(data['vitri_y'])
-        vitri_z = int(data['vitri_z'])
+        vitri_x = float(data['vitri_x'])
+        vitri_y = float(data['vitri_y'])
+        vitri_z = float(data['vitri_z'])
+        phi = float(data['phi'])
+        gramma = float(data['gramma'])
+        position = data['position']
+        velocity = data['velocity']
+        v = data['v']
+        description = data['description']
+        theta_1 = cal_theta_1(vitri_y, vitri_z)
+        theta_5 = cal_theta_5(gramma, theta_1)
 
-        theta_1 = cal_theta_1(vitri_x, vitri_y, vitri_z)
         theta_2 = cal_theta_2(vitri_x, vitri_y, vitri_z, theta_1)
         theta_3 = cal_theta_3(vitri_x, vitri_y, vitri_z, theta_1, theta_2)
         theta_4 = cal_theta_4(vitri_x, vitri_y, vitri_z, theta_1, theta_2, theta_3)
-        theta_5 = cal_theta_5(vitri_x, vitri_y, vitri_z, theta_1, theta_2, theta_3, theta_4)
-        w_1, w_2, w_3, w_4, w_5, mode, position, velocity = 6, 7, 8, 9, 10, "mode1", 11, 13
-        data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, mode, vitri_x, vitri_y, vitri_z, position, velocity]
+        
+        w_1, w_2, w_3, w_4, w_5 = 6, 7, 8, 9, 10
+        data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, vitri_x, vitri_y, vitri_z, phi, gramma, v, position, velocity, description]
         Connect.insert_data(data, table_name="MotorDefault")
         return redirect(url_for('defaultpoints'))
 
