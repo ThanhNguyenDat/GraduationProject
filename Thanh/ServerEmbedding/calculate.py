@@ -7,18 +7,6 @@ d1 = 100
 d4 = 100
 
     
-def cal_theta_2(x, y, z, theta_1):
-    theta_2 = np.arctan2(y, z) - theta_1
-    return theta_2
-
-def cal_theta_3(x, y, z, theta_1, theta_2):
-    theta_3 = np.arctan2(y, z) - theta_1 - theta_2
-    return theta_3
-
-def cal_theta_4(x, y, z, theta_1, theta_2, theta_3):
-    theta_4 = np.arctan2(y, z) - theta_1 - theta_2 - theta_3
-    return theta_4
-
 def theta2sc(theta):
     return np.sin(theta), np.cos(theta)
 
@@ -37,7 +25,6 @@ def cal_pos_p(theta_1, theta_2, theta_3, theta_4, theta_5):
     pz = d1 + a3 * c23 + a2 * c2 - d4 * s23 - a5 * s5 * s23 + a5 * c4 * c5 * c23
     phi = theta_2 + theta_3 + theta_4
     gramma = theta_1 + theta_5
-
 
     return px, py, pz, phi, gramma
 
@@ -65,6 +52,7 @@ def cal_theta_5(gramma, theta_1):
     theta_5 = gramma - theta_1
     return theta_5
     
+    
 # def cal_theta_3(x, y, z, theta_1, theta_2, theta_3, theta_4, theta_5):
 #     s23, c23 = theta2sc(theta_2 + theta_3)
 #     s2, c2 = theta2sc(theta_2)
@@ -88,3 +76,17 @@ def cal_theta_5(gramma, theta_1):
 
 # def cal_theta_4(gramma, theta_2, theta_3):
 #     return gramma - theta_2 - theta_3
+
+
+
+def cal_theta_2(x, y, z, theta_1):
+    theta_2 = np.arctan2(y, z) - theta_1
+    return theta_2
+
+def cal_theta_3(x, y, z, theta_1, theta_2):
+    theta_3 = np.arctan2(y, z) - theta_1 - theta_2
+    return theta_3
+
+def cal_theta_4(x, y, z, theta_1, theta_2, theta_3):
+    theta_4 = np.arctan2(y, z) - theta_1 - theta_2 - theta_3
+    return theta_4
