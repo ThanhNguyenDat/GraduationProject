@@ -19,16 +19,16 @@ app = Flask(__name__,
 def include_example():
     return render_template('home_page.html')
 
-@app.route('/controll')
-def controll():
+@app.route('/controlposition')
+def control():
     result = Connect.show_data()
     # get the lastest result from database
     if len(result) > 0:
         result = result[-1]
     print("Len result: ", len(result))
-    return render_template('./control/index.html', result=result)
+    return render_template('./controlposition/index.html', result=result)
 
-@app.route('/controll', methods=['POST'])
+@app.route('/controlposition', methods=['POST'])
 def setposition():
     if request.method == 'POST':
         print("request.form: ", request.form)
@@ -50,7 +50,16 @@ def setposition():
 
         data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, vitri_x, vitri_y, vitri_z, phi, gramma, v]
         Connect.insert_data(data)
-        return redirect(url_for('controll'))
+        return redirect(url_for('control'))
+
+@app.route('/controltheta')
+def controlltheta():
+    result = Connect.show_data()
+    # get the lastest result from database
+    if len(result) > 0:
+        result = result[-1]
+    print("Len result: ", len(result))
+    return render_template('./control/index_theta.html', result=result)
 
 @app.route('/defaultpoints')
 def defaultpoints():
