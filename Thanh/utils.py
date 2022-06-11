@@ -82,12 +82,6 @@ def transform_matrix_from_vector(vec1, vec2=[0, 0, 1]):
     mat[:3,:3] = rotation_matrix_3x3_from_vectors(vec1, vec2)
     return mat
 
-def Rx(matrix_1, matrix_2):
-    """
-    Rotaion matrix x axis 
-    """
-    matrix = 
-    
 
 
 # mat = rotation_matrix_3x3_from_vectors(vector_object, vector_init_z)

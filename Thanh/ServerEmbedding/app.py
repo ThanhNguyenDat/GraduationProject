@@ -20,7 +20,7 @@ def include_example():
     return render_template('home_page.html')
 
 @app.route('/controlposition')
-def control():
+def controlposition():
     result = Connect.show_data()
     # get the lastest result from database
     if len(result) > 0:
@@ -50,16 +50,40 @@ def setposition():
 
         data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, vitri_x, vitri_y, vitri_z, phi, gramma, v]
         Connect.insert_data(data)
-        return redirect(url_for('control'))
+        return redirect(url_for('controlposition'))
 
 @app.route('/controltheta')
-def controlltheta():
+def controltheta():
     result = Connect.show_data()
     # get the lastest result from database
     if len(result) > 0:
         result = result[-1]
     print("Len result: ", len(result))
-    return render_template('./control/index_theta.html', result=result)
+    return render_template('./controltheta/index.html', result=result)
+
+@app.route('/controltheta', methods=['POST'])
+def settheta():
+    if request.method == 'POST':
+        print("request.form: ", request.form)
+        data = request.form
+        vitri_x = 1.0
+        vitri_y = 2.0
+        vitri_z = 3.0
+        phi = 4.0
+        gramma = 5.0
+        v = 6.0
+
+        theta_1 = float(data['theta_1'])
+        theta_2 = float(data['theta_2'])
+        theta_3 = float(data['theta_3'])
+        theta_4 = float(data['theta_4'])
+        theta_5 = float(data['theta_5'])
+        w_1, w_2, w_3, w_4, w_5 = 6, 7, 8, 9, 10
+
+        data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, vitri_x, vitri_y, vitri_z, phi, gramma, v]
+        Connect.insert_data(data)
+        return redirect(url_for('controltheta'))
+
 
 @app.route('/defaultpoints')
 def defaultpoints():
