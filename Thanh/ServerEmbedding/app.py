@@ -6,6 +6,9 @@ from calculate import cal_theta_1, cal_theta_2, cal_theta_3, cal_theta_4, cal_th
 # from database_setup import Base, Controll
 from src.util.connectmysql import ConnectDB
 from calculate import *
+import plotly
+import plotly.graph_objs as go
+import plotly.express as px
 
 Connect = ConnectDB()
 Connect.create_table_controll()
