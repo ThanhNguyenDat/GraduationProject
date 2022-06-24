@@ -1,292 +1,138 @@
 {% block css %}
-    <link rel="stylesheet" href="{{url_for('static', filename='controlposition/style.css')}}" />
-{% endblock %}
-{% extends "layout.html" %}
-{% block title %}ControllTheta{% endblock %}
-{% block content %}
-<div class="container ">
-    <div class="row">
-        <div class="col-md-12">
-            
-            <form action="{{ url_for('controltheta') }}" method="post" id="position" name="position">
-                <h1> Controll Panel </h1>
-                <table class="table table-striped table-dark text-white bg-dark " id="setpointtable" >
-                    <label >Set Point</label>
-                    <thead>
-                        <tr style="text-align: center;">
-                            <th>Theta 1</th>
-                            <th>Theta 2</th>
-                            <th>Theta 3</th>
-                            <th>Theta 4</th>
-                            <th>Theta 5</th>
-                        </tr>
-                    </thead>
-                    
-                    <tbody>
-                        
-                            <tr>
-                                <td><input type="text" placeholder="theta 1" name="theta_1" onchange="check_float(this)"></td>
-                                <td><input type="text" placeholder="theta 2" name="theta_2" onchange="check_float(this)"></td>
-                                <td><input type="text" placeholder="theta 3" name="theta_3" onchange="check_float(this)"></td>
-                                <td><input type="text" placeholder="theta 4" name="theta_4" onchange="check_float(this)"></td>
-                                <td><input type="text" placeholder="theta 5" name="theta_5" onchange="check_float(this)"></td>
-                            </tr>
-                        
-                    </tbody>
-                </table>
+<link
+  rel="stylesheet"
+  href="{{url_for('static', filename='controlposition/style.css')}}"
+/>
+{% endblock %} {% extends "layout.html" %} {% block title %}ControllTheta{%
+endblock %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form
+        action="{{ url_for('controltheta') }}"
+        method="post"
+        id="position"
+        name="position"
+      >
+        <h1>Controll Panel</h1>
+        <table
+          class="table table-striped table-dark text-white bg-dark"
+          id="setpointtable"
+        >
+          <label>Set Point</label>
+          <thead>
+            <tr style="text-align: center">
+              <th>Theta 1</th>
+              <th>Theta 2</th>
+              <th>Theta 3</th>
+              <th>Theta 4</th>
+              <th>Theta 5</th>
+            </tr>
+          </thead>
 
+          <tbody>
+            <tr>
+              <td>
+                <input
+                  type="text"
+                  placeholder="theta 1"
+                  name="theta_1"
+                  onchange="check_float(this)"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="theta 2"
+                  name="theta_2"
+                  onchange="check_float(this)"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="theta 3"
+                  name="theta_3"
+                  onchange="check_float(this)"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="theta 4"
+                  name="theta_4"
+                  onchange="check_float(this)"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="theta 5"
+                  name="theta_5"
+                  onchange="check_float(this)"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <input type="submit" class="btn btn-primary" id="submit" value="Submit">
-                    </div>
-                </div>
-            </form>
-            
-            <table class="table table-striped table-dark text-white bg-dark" id="currenttalbe">
-                <label>Current</label>
-                <thead>
-                    <tr style="text-align: center;">
-                        <th>Theta 1</th>
-                        <th>Theta 2</th>
-                        <th>Theta 3</th>
-                        <th>Theta 4</th>
-                        <th>Theta 5</th>
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    {% if result %}
-                        <tr style="text-align: center;">
-                            <td>{{ result[1] }}</td>
-                            <td>{{ result[2] }}</td>
-                            <td>{{ result[3] }}</td>
-                            <td>{{ result[4] }}</td>
-                            <td>{{ result[5] }}</td>
-                        </tr>
-                        <p hidden id="result_x">{{ result[11] }}</p>
-                        <p hidden id="result_y">{{ result[12] }}</p>
-                        <p hidden id="result_z">{{ result[13] }}</p>
-                    {% endif %}
-                </tbody>
-            </table>
-
-
-            <style>
-                .highcharts-figure,
-                .highcharts-data-table table {
-                    min-width: 310px;
-                    max-width: 800px;
-                    margin: 0 auto;
-                }
-
-                #container {
-                    height: 400px;
-                }
-
-                .highcharts-data-table table {
-                    font-family: Verdana, sans-serif;
-                    border-collapse: collapse;
-                    border: 1px solid #ebebeb;
-                    margin: 10px auto;
-                    text-align: center;
-                    width: 100%;
-                    max-width: 500px;
-                }
-
-                .highcharts-data-table caption {
-                    padding: 1em 0;
-                    font-size: 1.2em;
-                    color: #555;
-                }
-
-                .highcharts-data-table th {
-                    font-weight: 600;
-                    padding: 0.5em;
-                }
-
-                .highcharts-data-table td,
-                .highcharts-data-table th,
-                .highcharts-data-table caption {
-                    padding: 0.5em;
-                }
-
-                .highcharts-data-table thead tr,
-                .highcharts-data-table tr:nth-child(even) {
-                    background: #f8f8f8;
-                }
-
-                .highcharts-data-table tr:hover {
-                    background: #f1f7ff;
-                }
-            </style>
-            <figure class="highcharts-figure">
-                <div id="container"></div>
-                <p class="highcharts-description"></p>
-            </figure>
-
+        <div class="row">
+          <div class="col-md-12">
+            <input
+              type="submit"
+              class="btn btn-primary"
+              id="submit"
+              value="Submit"
+            />
+          </div>
         </div>
+      </form>
+
+      <table
+        class="table table-striped table-dark text-white bg-dark"
+        id="currenttalbe"
+      >
+        <label>Current</label>
+        <thead>
+          <tr style="text-align: center">
+            <th>Theta 1</th>
+            <th>Theta 2</th>
+            <th>Theta 3</th>
+            <th>Theta 4</th>
+            <th>Theta 5</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% if result %}
+          <tr style="text-align: center">
+            <td>{{ result[1] }}</td>
+            <td>{{ result[2] }}</td>
+            <td>{{ result[3] }}</td>
+            <td>{{ result[4] }}</td>
+            <td>{{ result[5] }}</td>
+          </tr>
+          <p hidden id="result_x">{{ result[11] }}</p>
+          <p hidden id="result_y">{{ result[12] }}</p>
+          <p hidden id="result_z">{{ result[13] }}</p>
+          {% endif %}
+        </tbody>
+      </table>
+      <figure class="highcharts-figure">
+        <div id="container"></div>
+        <p class="highcharts-description"></p>
+      </figure>
     </div>
+  </div>
 </div>
 
-{% endblock %}
-{% block script %}
-<script type="text/javascript">
-    check_float = function(obj) {
-        var re = /^-?\d*(\.\d+)?$/;
-        if (!re.test(obj.value)) {
-            alert("Please enter a number");
-            obj.value = "";
-        }
-    }
-</script>
-
-
+{% endblock %} {% block script %}
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-3d.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="{{url_for('static', filename='controltheta/chart.js')}}"></script>
 
-
-<script type="text/javascript">
-
-result_x = parseFloat(document.getElementById("result_x").innerHTML);
-result_y = parseFloat(document.getElementById("result_y").innerHTML);
-result_z = parseFloat(document.getElementById("result_z").innerHTML);
-console.log(result_x);
-console.log(result_y);
-console.log(result_z);
-
-// Give the points a 3D feel by adding a radial gradient
-Highcharts.setOptions({
-    colors: Highcharts.getOptions().colors.map(function (color) {
-        return {
-            radialGradient: {
-                cx: 0.4,
-                cy: 0.3,
-                r: 0.5
-            },
-            stops: [
-                [0, color],
-                [1, Highcharts.color(color).brighten(-0.2).get('rgb')]
-            ]
-        };
-    })
-});
-
-// Set up the chart
-var chart = new Highcharts.Chart({
-    chart: {
-        renderTo: 'container',
-        margin: 100,
-        type: 'scatter3d',
-        animation: false,
-        options3d: {
-            enabled: true,
-            alpha: 10,
-            beta: 30,
-            depth: 250,
-            viewDistance: 5,
-            fitToPlot: false,
-            frame: {
-                bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
-                back: { size: 1, color: 'rgba(0,0,0,0.04)' },
-                side: { size: 1, color: 'rgba(0,0,0,0.06)' }
-            }
-        }
-    },
-    title: {
-        text: 'Draggable box'
-    },
-    subtitle: {
-        text: 'Click and drag the plot area to rotate in space'
-    },
-    plotOptions: {
-        scatter: {
-            width: 10,
-            height: 10,
-            depth: 10
-        }
-    },
-    yAxis: {
-        min: 0,
-        max: 10,
-        title: null
-    },
-    xAxis: {
-        min: 0,
-        max: 10,
-        gridLineWidth: 1
-    },
-    zAxis: {
-        min: 0,
-        max: 10,
-        showFirstLabel: false
-    },
-    legend: {
-        enabled: false
-    },
-    series: [{
-        name: 'Data',
-        colorByPoint: true,
-        accessibility: {
-            exposeAsGroupOnly: true
-        },
-        data: [
-            [result_x, result_y, result_z]
-            ]
-    }]
-});
-
-
-// Add mouse and touch events for rotation
-(function (H) {
-    function dragStart(eStart) {
-        eStart = chart.pointer.normalize(eStart);
-
-        var posX = eStart.chartX,
-            posY = eStart.chartY,
-            alpha = chart.options.chart.options3d.alpha,
-            beta = chart.options.chart.options3d.beta,
-            sensitivity = 5,  // lower is more sensitive
-            handlers = [];
-
-        function drag(e) {
-            // Get e.chartX and e.chartY
-            e = chart.pointer.normalize(e);
-
-            chart.update({
-                chart: {
-                    options3d: {
-                        alpha: alpha + (e.chartY - posY) / sensitivity,
-                        beta: beta + (posX - e.chartX) / sensitivity
-                    }
-                }
-            }, undefined, undefined, false);
-        }
-
-        function unbindAll() {
-            handlers.forEach(function (unbind) {
-                if (unbind) {
-                    unbind();
-                }
-            });
-            handlers.length = 0;
-        }
-
-        handlers.push(H.addEvent(document, 'mousemove', drag));
-        handlers.push(H.addEvent(document, 'touchmove', drag));
-
-
-        handlers.push(H.addEvent(document, 'mouseup', unbindAll));
-        handlers.push(H.addEvent(document, 'touchend', unbindAll));
-    }
-    H.addEvent(chart.container, 'mousedown', dragStart);
-    H.addEvent(chart.container, 'touchstart', dragStart);
-}(Highcharts));
-
-
-</script>
-    
+<script src="{{url_for('static', filename='controltheta/val_float.js')}}"></script>
 {% endblock %}
