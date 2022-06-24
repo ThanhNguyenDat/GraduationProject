@@ -1,5 +1,5 @@
 from unittest import result
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, Response, Request
 from calculate import cal_theta_1, cal_theta_2, cal_theta_3, cal_theta_4, cal_theta_5
 # from sqlalchemy import create_engine
 # from sqlalchemy.orm import sessionmaker
@@ -9,30 +9,45 @@ from calculate import *
 import plotly
 import plotly.graph_objs as go
 import plotly.express as px
+import json
 
 Connect = ConnectDB()
 Connect.create_table_controll()
 Connect.create_table_motor_default()
 
-app = Flask(__name__,
+
+# plot 3d scater from database
+def plot_3d_scatter(x, y, z):
+    data = [go.Scatter3d(x=x, y=y, z=z, mode='markers', marker=dict(size=1))]
+    layout = go.Layout(title='3D Scatter Plot from Database')
+    fig = go.Figure(data=data, layout=layout)
+    return fig
+
+server = Flask(__name__,
             static_url_path='',
             static_folder='src/static',
             template_folder='src/templates', )
 
-@app.route('/')
+@server.route('/')
 def include_example():
     return render_template('home_page.html')
 
-@app.route('/controlposition')
+@server.route('/controlposition')
 def controlposition():
     result = Connect.show_data()
     # get the lastest result from database
     if len(result) > 0:
         result = result[-1]
-    print("Len result: ", len(result))
-    return render_template('./controlposition/index.html', result=result)
+        # x = result[11]
+        # y = result[12]
+        # z = result[13]
+        # fig = plot_3d_scatter(x, y, z)
 
-@app.route('/controlposition', methods=['POST'])
+        return render_template('./controlposition/index.html', result=result)
+    else:
+        return render_template('./controlposition/index.html')
+
+@server.route('/controlposition', methods=['POST'])
 def setposition():
     if request.method == 'POST':
         print("request.form: ", request.form)
@@ -56,7 +71,7 @@ def setposition():
         Connect.insert_data(data)
         return redirect(url_for('controlposition'))
 
-@app.route('/controltheta')
+@server.route('/controltheta')
 def controltheta():
     result = Connect.show_data()
     # get the lastest result from database
@@ -65,7 +80,7 @@ def controltheta():
     print("Len result: ", len(result))
     return render_template('./controltheta/index.html', result=result)
 
-@app.route('/controltheta', methods=['POST'])
+@server.route('/controltheta', methods=['POST'])
 def settheta():
     if request.method == 'POST':
         print("request.form: ", request.form)
@@ -86,7 +101,7 @@ def settheta():
         return redirect(url_for('controltheta'))
 
 
-@app.route('/defaultpoints')
+@server.route('/defaultpoints')
 def defaultpoints():
     results = Connect.show_data(table_name="MotorDefault")
     
@@ -96,7 +111,7 @@ def defaultpoints():
     return render_template('./defaultpoints/index.html', results=results)
 
 # edit default points with id
-@app.route('/defaultpoints/edit/<int:id>', methods=['GET', 'POST'])
+@server.route('/defaultpoints/edit/<int:id>', methods=['GET', 'POST'])
 def edit_defaultpoints(id):
     results = Connect.show_data(table_name="MotorDefault")
     
@@ -132,16 +147,16 @@ def edit_defaultpoints(id):
 
     return render_template('defaultpoints/edit.html', id=id, result=result)
 
-@app.route('/defaultpoints/delete/<int:id>', methods=['GET', 'POST'])
+@server.route('/defaultpoints/delete/<int:id>', methods=['GET', 'POST'])
 def delete_defaultpoints(id):    
     Connect.delete_data_by_id(id, name_database="MotorDefault")
     return redirect(url_for('defaultpoints'))
     
-@app.route('/defaultpoints/add')
+@server.route('/defaultpoints/add')
 def add_defaultpoints():
     return render_template('defaultpoints/add.html')
 
-@app.route('/defaultpoints/add', methods=['POST'])
+@server.route('/defaultpoints/add', methods=['POST'])
 def add_position():
     if request.method == 'POST':
         data = request.form
@@ -167,7 +182,7 @@ def add_position():
         Connect.insert_data(data, table_name="MotorDefault")
         return redirect(url_for('defaultpoints'))
 
-@app.route('/defaultpoints/', methods=['POST'])
+@server.route('/defaultpoints/', methods=['POST'])
 def submit_position(id):
     results = Connect.show_data(table_name="MotorDefault")
     
@@ -183,4 +198,4 @@ def submit_position(id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    server.run(debug=True, host='0.0.0.0')
