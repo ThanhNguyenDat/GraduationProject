@@ -5,7 +5,6 @@ a3 = 100
 a5 = 100
 d1 = 100
 d4 = 100
-
     
 def theta2sc(theta):
     return np.sin(theta), np.cos(theta)
