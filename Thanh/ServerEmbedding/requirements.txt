@@ -3,5 +3,3 @@ gunicorn
 flask
 mysql-connector-python
 numpy
-pandas
-plotly
