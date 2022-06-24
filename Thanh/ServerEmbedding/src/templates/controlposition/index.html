@@ -25,12 +25,13 @@
                     
                     <tbody>
                             <tr>
-                                <td><input type="text" placeholder="vi tri x" name="vitri_x" for='irate' name='irate'></td>
-                                <td><input type="text" placeholder="vi tri y" name="vitri_y" for='irate' name='irate'></td>
-                                <td><input type="text" placeholder="vi tri z" name="vitri_z" for='irate' name='irate'></td>
-                                <td><input type="text" placeholder="phi" name="phi" for='irate' name='irate'></td>
-                                <td><input type="text" placeholder="gramma" name="gramma" for='irate' name='irate'></td>
-                                <td><input type="text" placeholder="v" name="v"></td>
+                                <!-- check float valid -->
+                                <td><input type="text" placeholder="vi tri x" name="vitri_x" for='irate' name='irate' id="vitri_x" onchange="check_float(this)"></td>
+                                <td><input type="text" placeholder="vi tri y" name="vitri_y" for='irate' name='irate' id="vitri_y" onchange="check_float(this)"></td>
+                                <td><input type="text" placeholder="vi tri z" name="vitri_z" for='irate' name='irate' id="vitri_z" onchange="check_float(this)"></td>
+                                <td><input type="text" placeholder="phi" name="phi" for='irate' name='irate' id="phi" onchange="check_float(this)"></td>
+                                <td><input type="text" placeholder="gramma" name="gramma" for='irate' name='irate' id="gramma" onchange="check_float(this)"></td>
+                                <td><input type="text" placeholder="v" name="v" id="v"></td>
                             </tr>
                     </tbody>
                 </table>
@@ -150,9 +151,15 @@
         }
     }]);
 </script> -->
-
-
-
+<script type="text/javascript">
+    check_float = function(obj) {
+        var re = /^-?\d*(\.\d+)?$/;
+        if (!re.test(obj.value)) {
+            alert("Please enter a number");
+            obj.value = "";
+        }
+    }
+</script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-3d.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>

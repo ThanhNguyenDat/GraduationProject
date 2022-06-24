@@ -13,7 +13,7 @@ def theta2sc(theta):
 def sc2theta(s, c):
     return np.arctan2(s, c)
 
-def cal_pos_p(theta_1, theta_2, theta_3, theta_4, theta_5):
+def get_pos_p(theta_1, theta_2, theta_3, theta_4, theta_5):
     s1, c1 = theta2sc(theta_1)
     s2, c2 = theta2sc(theta_2)
     # s3, c3 = theta2sc(theta_3)

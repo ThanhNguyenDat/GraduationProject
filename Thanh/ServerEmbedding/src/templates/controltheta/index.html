@@ -25,11 +25,11 @@
                     <tbody>
                         
                             <tr>
-                                <td><input type="text" placeholder="theta 1" name="theta_1" required></td>
-                                <td><input type="text" placeholder="theta 2" name="theta_2" required></td>
-                                <td><input type="text" placeholder="theta 3" name="theta_3" required></td>
-                                <td><input type="text" placeholder="theta 4" name="theta_4" required></td>
-                                <td><input type="text" placeholder="theta 5" name="theta_5" required></td>
+                                <td><input type="text" placeholder="theta 1" name="theta_1" onchange="check_float(this)"></td>
+                                <td><input type="text" placeholder="theta 2" name="theta_2" onchange="check_float(this)"></td>
+                                <td><input type="text" placeholder="theta 3" name="theta_3" onchange="check_float(this)"></td>
+                                <td><input type="text" placeholder="theta 4" name="theta_4" onchange="check_float(this)"></td>
+                                <td><input type="text" placeholder="theta 5" name="theta_5" onchange="check_float(this)"></td>
                             </tr>
                         
                     </tbody>
@@ -131,6 +131,16 @@
 
 {% endblock %}
 {% block script %}
+<script type="text/javascript">
+    check_float = function(obj) {
+        var re = /^-?\d*(\.\d+)?$/;
+        if (!re.test(obj.value)) {
+            alert("Please enter a number");
+            obj.value = "";
+        }
+    }
+</script>
+
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-3d.js"></script>

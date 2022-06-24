@@ -52,22 +52,33 @@ def setposition():
     if request.method == 'POST':
         print("request.form: ", request.form)
         data = request.form
-        vitri_x = float(data['vitri_x'])
-        vitri_y = float(data['vitri_y'])
-        vitri_z = float(data['vitri_z'])
-        phi = float(data['phi'])
         
-        gramma = float(data['gramma'])
-        v = float(data['v'])
+
+        if len(data['vitri_x']):
+            vitri_x = float(data['vitri_x'])
+        else:
+            vitri_x = 0
+        if len(data['vitri_y']):
+            vitri_y = float(data['vitri_y'])
+        else:
+            vitri_y = 0
+        if len(data['vitri_z']):
+            vitri_z = float(data['vitri_z'])
+        else:
+            vitri_z = 0
+        if len(data['phi']):
+            phi = float(data['phi'])
+        else:
+            phi = 0
+        if len(data['gramma']):
+            gramma = float(data['gramma'])
+        else:
+            gramma = 0
+        if len(data['v']):
+            v = float(data['v'])
+        else:
+            v = 0
         
-        print ("vitri_x: ", vitri_x)
-        print ("vitri_y: ", vitri_y)
-        print ("vitri_z: ", vitri_z)
-        print ("phi: ", phi)
-        print ("gramma: ", gramma)
-        print ("v: ", v)
-
-
         theta_1 = cal_theta_1(vitri_y, vitri_z)
         theta_5 = cal_theta_5(gramma, theta_1)
         
@@ -97,13 +108,28 @@ def settheta():
         data = request.form
         
         v = 6.0
+        if len(data['theta_1']):
+            theta_1 = float(data['theta_1'])
+        else:
+            theta_1 = 0
+        if len(data['theta_2']):
+            theta_2 = float(data['theta_2'])
+        else:
+            theta_2 = 0
+        if len(data['theta_3']):
+            theta_3 = float(data['theta_3'])
+        else:
+            theta_3 = 0
+        if len(data['theta_4']):
+            theta_4 = float(data['theta_4'])
+        else:
+            theta_4 = 0
+        if len(data['theta_5']):
+            theta_5 = float(data['theta_5'])
+        else:
+            theta_5 = 0
 
-        theta_1 = float(data['theta_1'])
-        theta_2 = float(data['theta_2'])
-        theta_3 = float(data['theta_3'])
-        theta_4 = float(data['theta_4'])
-        theta_5 = float(data['theta_5'])
-        vitri_x, vitri_y, vitri_z, phi, gramma = cal_pos_p(theta_1, theta_2, theta_3, theta_4, theta_5)
+        vitri_x, vitri_y, vitri_z, phi, gramma = get_pos_p(theta_1, theta_2, theta_3, theta_4, theta_5)
         w_1, w_2, w_3, w_4, w_5 = 6, 7, 8, 9, 10
 
         data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, vitri_x, vitri_y, vitri_z, phi, gramma, v]
