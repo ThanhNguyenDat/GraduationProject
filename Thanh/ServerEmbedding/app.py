@@ -56,8 +56,18 @@ def setposition():
         vitri_y = float(data['vitri_y'])
         vitri_z = float(data['vitri_z'])
         phi = float(data['phi'])
+        
         gramma = float(data['gramma'])
         v = float(data['v'])
+        
+        print ("vitri_x: ", vitri_x)
+        print ("vitri_y: ", vitri_y)
+        print ("vitri_z: ", vitri_z)
+        print ("phi: ", phi)
+        print ("gramma: ", gramma)
+        print ("v: ", v)
+
+
         theta_1 = cal_theta_1(vitri_y, vitri_z)
         theta_5 = cal_theta_5(gramma, theta_1)
         
