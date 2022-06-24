@@ -158,15 +158,43 @@ def edit_defaultpoints(id):
     
     if request.method == 'POST':
         data = request.form
-        vitri_x = float(data['vitri_x'])
-        vitri_y = float(data['vitri_y'])
-        vitri_z = float(data['vitri_z'])
-        phi = float(data['phi'])
-        gramma = float(data['gramma'])
-        v = data['v']
-        position = data['position']
-        velocity = data['velocity']
-        description = data['description']
+
+        if len(data['vitri_x']):
+            vitri_x = float(data['vitri_x'])
+        else:
+            vitri_x = 0
+        if len(data['vitri_y']):
+            vitri_y = float(data['vitri_y'])
+        else:
+            vitri_y = 0
+        if len(data['vitri_z']):
+            vitri_z = float(data['vitri_z'])
+        else:
+            vitri_z = 0
+        if len(data['phi']):
+            phi = float(data['phi'])
+        else:
+            phi = 0
+        if len(data['gramma']):
+            gramma = float(data['gramma'])
+        else:
+            gramma = 0
+        if len(data['v']):
+            v = float(data['v'])
+        else:
+            v = 0
+        if len(data['position']):
+            position = data['position']
+        else:
+            position = 0
+        if len(data['velocity']):
+            velocity = data['velocity']
+        else:
+            velocity = 0
+        if len(data['description']):
+            description = data['description']
+        else:
+            description = " "
 
         theta_1 = cal_theta_1(vitri_y, vitri_z)
         theta_5 = cal_theta_5(gramma, theta_1)
@@ -196,15 +224,43 @@ def add_defaultpoints():
 def add_position():
     if request.method == 'POST':
         data = request.form
-        vitri_x = float(data['vitri_x'])
-        vitri_y = float(data['vitri_y'])
-        vitri_z = float(data['vitri_z'])
-        phi = float(data['phi'])
-        gramma = float(data['gramma'])
-        position = data['position']
-        velocity = data['velocity']
-        v = data['v']
-        description = data['description']
+        if len(data['vitri_x']):
+            vitri_x = float(data['vitri_x'])
+        else:
+            vitri_x = 0
+        if len(data['vitri_y']):
+            vitri_y = float(data['vitri_y'])
+        else:
+            vitri_y = 0
+        if len(data['vitri_z']):
+            vitri_z = float(data['vitri_z'])
+        else:
+            vitri_z = 0
+        if len(data['phi']):
+            phi = float(data['phi'])
+        else:
+            phi = 0
+        if len(data['gramma']):
+            gramma = float(data['gramma'])
+        else:
+            gramma = 0
+        if len(data['v']):
+            v = float(data['v'])
+        else:
+            v = 0
+        if len(data['position']):
+            position = data['position']
+        else:
+            position = 0
+        if len(data['velocity']):
+            velocity = data['velocity']
+        else:
+            velocity = 0
+        if len(data['description']):
+            description = data['description']
+        else:
+            description = " "
+
 
         theta_1 = cal_theta_1(vitri_y, vitri_z)
         theta_5 = cal_theta_5(gramma, theta_1)
