@@ -10,23 +10,11 @@ import plotly
 import plotly.graph_objs as go
 import plotly.express as px
 import json
+from server import server
 
 Connect = ConnectDB()
 Connect.create_table_controll()
 Connect.create_table_motor_default()
-
-
-# plot 3d scater from database
-def plot_3d_scatter(x, y, z):
-    data = [go.Scatter3d(x=x, y=y, z=z, mode='markers', marker=dict(size=1))]
-    layout = go.Layout(title='3D Scatter Plot from Database')
-    fig = go.Figure(data=data, layout=layout)
-    return fig
-
-server = Flask(__name__,
-            static_url_path='',
-            static_folder='src/static',
-            template_folder='src/templates', )
 
 @server.route('/')
 def include_example():
@@ -289,5 +277,6 @@ def submit_position(id):
         return redirect(url_for('control'))
 
 
-if __name__ == '__main__':
-    server.run(debug=True, host='0.0.0.0')
+
+# if __name__ == '__main__':
+#     server.run(debug=True, host='0.0.0.0', port=5000)
