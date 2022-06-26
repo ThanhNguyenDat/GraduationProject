@@ -1,4 +1,6 @@
 import numpy as np
+import time
+
 
 a2 = 100
 a3 = 100
@@ -13,6 +15,9 @@ def sc2theta(s, c):
     return np.arctan2(s, c)
 
 def get_pos_p(theta_1, theta_2, theta_3, theta_4, theta_5):
+
+    min = time.localtime().tm_min
+    sec = time.localtime().tm_sec
     s1, c1 = theta2sc(theta_1)
     s2, c2 = theta2sc(theta_2)
     # s3, c3 = theta2sc(theta_3)

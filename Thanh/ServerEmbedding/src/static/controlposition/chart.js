@@ -1,6 +1,10 @@
 result_x = parseFloat(document.getElementById("result_x").innerHTML);
 result_y = parseFloat(document.getElementById("result_y").innerHTML);
 result_z = parseFloat(document.getElementById("result_z").innerHTML);
+_result_x = parseFloat(document.getElementById("_result_x").innerHTML);
+_result_y = parseFloat(document.getElementById("_result_y").innerHTML);
+_result_z = parseFloat(document.getElementById("_result_z").innerHTML);
+
 console.log(result_x);
 console.log(result_y);
 console.log(result_z);
@@ -23,6 +27,8 @@ Highcharts.setOptions({
 });
 
 // Set up the chart
+data = [[result_x, result_y, result_z], [_result_x, _result_y, _result_z]];
+
 var chart = new Highcharts.Chart({
   chart: {
     renderTo: "container",
@@ -59,17 +65,19 @@ var chart = new Highcharts.Chart({
   yAxis: {
     min: 0,
     max: 10,
-    title: null,
+    title: "Y Axis",
   },
   xAxis: {
     min: 0,
     max: 10,
     gridLineWidth: 1,
+    title: "X Axis",
   },
   zAxis: {
     min: 0,
     max: 10,
     showFirstLabel: false,
+    title: "Z Axis",
   },
   legend: {
     enabled: false,
@@ -81,10 +89,15 @@ var chart = new Highcharts.Chart({
       accessibility: {
         exposeAsGroupOnly: true,
       },
-      data: [[result_x, result_y, result_z]],
+      data: data,
     },
   ],
 });
+result_x_pre = result_x;
+result_y_pre = result_y;
+result_z_pre = result_z;
+
+
 
 // Add mouse and touch events for rotation
 (function (H) {

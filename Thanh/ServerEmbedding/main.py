@@ -6,11 +6,12 @@ from calculate import cal_theta_1, cal_theta_2, cal_theta_3, cal_theta_4, cal_th
 # from database_setup import Base, Controll
 from src.util.connectmysql import ConnectDB
 from calculate import *
-import plotly
-import plotly.graph_objs as go
-import plotly.express as px
-import json
+# import plotly
+# import plotly.graph_objs as go
+# import plotly.express as px
+# import json
 from server import server
+
 
 Connect = ConnectDB()
 Connect.create_table_controll()
@@ -25,15 +26,17 @@ def controlposition():
     result = Connect.show_data()
     # get the lastest result from database
     if len(result) > 0:
-        result = result[-1]
+        last_result = result[-1]
+        
+
         # x = result[11]
         # y = result[12]
         # z = result[13]
         # fig = plot_3d_scatter(x, y, z)
 
-        return render_template('./controlposition/index.html', result=result)
-    else:
-        return render_template('./controlposition/index.html')
+    return render_template('./controlposition/index.html', result=last_result, _result=_result)
+    # else:
+    #     return render_template('./controlposition/index.html')
 
 @server.route('/controlposition', methods=['POST'])
 def setposition():
@@ -78,6 +81,12 @@ def setposition():
 
         data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, vitri_x, vitri_y, vitri_z, phi, gramma, v]
         Connect.insert_data(data)
+        for i in range(5):
+            vitri_x = float(data['vitri_x']) + i*0.1
+            vitri_y = float(data['vitri_y']) + i*0.1
+            vitri_z = float(data['vitri_z']) + i*0.1
+            data = [theta_1, theta_2, theta_3, theta_4, theta_5, w_1, w_2, w_3, w_4, w_5, vitri_x, vitri_y, vitri_z, phi, gramma, v]
+            Connect.insert_data(data)
         return redirect(url_for('controlposition'))
 
 @server.route('/controltheta')
@@ -278,5 +287,5 @@ def submit_position(id):
 
 
 
-# if __name__ == '__main__':
-#     server.run(debug=True, host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    server.run(debug=True, host='0.0.0.0', port=5000)

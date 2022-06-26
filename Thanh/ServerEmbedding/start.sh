@@ -13,4 +13,4 @@ pip install -r requirements.txt
 #
 # run the data server
 #
-python wsgi.py
+python main.py
