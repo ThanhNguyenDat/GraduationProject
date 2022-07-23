@@ -5,7 +5,7 @@ import open3d as o3d
 from utils import *
 from config import *
 
-if False:
+if True:
     with open("./results/json/plane_points.json") as f:
         data = json.load(f)
         n = 0
@@ -26,36 +26,36 @@ if False:
         # visualize
         # o3d.visualization.draw_geometries([pcd])
 
-with open("./results/json/plane_model.json") as f, open("./results/json/plane_points.json") as f2:
-    plane_model = json.load(f)
-    base = plane_model["plane_model_0"]
-    cam =  [1.373, -8.081, -4.511]
+# with open("./results/json/plane_model.json") as f, open("./results/json/plane_points.json") as f2:
+#     plane_model = json.load(f)
+#     base = plane_model["plane_model_0"]
+#     cam =  [1.373, -8.081, -4.511]
     
     
-    plane_points = json.load(f2)
+#     plane_points = json.load(f2)
     
-    base_plane = plane_points["plane_seg_0"]
-    # pcd = create_pcd(base_plane)
-    pcd = o3d.io.read_point_cloud('./1.ply')
-    o3d.visualization.draw_geometries([pcd])
+#     base_plane = plane_points["plane_seg_0"]
+#     # pcd = create_pcd(base_plane)
+#     pcd = o3d.io.read_point_cloud('./1.ply')
+#     o3d.visualization.draw_geometries([pcd])
 
-    # rotation
-    # base_plane = np.array(base_plane)
-    # base_plane = np.dot(R_z, base_plane.T).T
-    # print(base_plane)
-    # visualize
+#     # rotation
+#     # base_plane = np.array(base_plane)
+#     # base_plane = np.dot(R_z, base_plane.T).T
+#     # print(base_plane)
+#     # visualize
     
-    # theta = compute_theta(base, cam)
-    # print(theta)
-    # rotation
-    R_z = Rz(30 * np.pi / 180)
-    print(R_z)
+#     # theta = compute_theta(base, cam)
+#     # print(theta)
+#     # rotation
+#     R_z = Rz(30 * np.pi / 180)
+#     print(R_z)
     
-    # rotate the point cloud
-    rotatePCD = create_point_cloud_rotation(pcd, R_z)
-    print("rotatePCD: ", rotatePCD.points)
+#     # rotate the point cloud
+#     rotatePCD = create_point_cloud_rotation(pcd, R_z)
+#     print("rotatePCD: ", rotatePCD.points)
 
-    o3d.visualization.draw_geometries([rotatePCD])
+#     o3d.visualization.draw_geometries([rotatePCD])
     
     
     

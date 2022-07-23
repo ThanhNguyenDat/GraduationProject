@@ -12,7 +12,7 @@ from calculate import *
 # import json
 from server import server
 
-
+# Creating a connection to the database and creating two tables in the database.
 Connect = ConnectDB()
 Connect.create_table_controll()
 Connect.create_table_motor_default()
@@ -34,7 +34,7 @@ def controlposition():
         # z = result[13]
         # fig = plot_3d_scatter(x, y, z)
 
-    return render_template('./controlposition/index.html', result=last_result, _result=_result)
+    return render_template('./controlposition/index.html', result=last_result)
     # else:
     #     return render_template('./controlposition/index.html')
 
