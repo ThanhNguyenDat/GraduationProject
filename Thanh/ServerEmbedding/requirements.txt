@@ -1,7 +1,0 @@
-wheel
-gunicorn
-flask
-mysql-connector-python
-numpy
-apscheduler
-flask_socketio
